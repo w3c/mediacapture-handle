@@ -192,8 +192,8 @@
                 agent MUST reject by raising {{NotSupportedError}}.
               </li>
               <li>
-                If the call to {{MediaDevices/setCaptureHandleConfig()}} is not from the top-level
-                document, the user agent MUST reject by raising {{InvalidStateError}}.
+                If the call to {{MediaDevices/setCaptureHandleConfig()}} is not from the [=top-level
+                browsing context=], the user agent MUST reject by raising {{InvalidStateError}}.
               </li>
             </ul>
             <p>
@@ -327,7 +327,9 @@
               cause the [=observable=] {{CaptureHandle}} to change, e.g. if changing
               {{CaptureHandleConfig/permittedOrigins}}.)
             </li>
-            <li>The captured application's top-level document is navigated cross-document.</li>
+            <li>
+              The captured application's [=top-level browsing context=] is navigated cross-document.
+            </li>
             <li>The user agent switches the track to follow a new application.</li>
           </ol>
           <pre class="idl">
