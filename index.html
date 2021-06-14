@@ -214,7 +214,7 @@
               </li>
               <li>
                 The user agent MUST report the new [=observable=] {{CaptureHandle}} whenever
-                producing a new {{MediaTrackSettings}} object.
+                {{MediaStreamTrack/getCaptureHandle}} is called.
               </li>
             </ol>
           </dd>
@@ -228,7 +228,7 @@
         {{CaptureHandle}} have two ways of reading it.
       </p>
       <ol>
-        <li>Reading the current value returned by {{MediaStreamTrack/getSettings()}}.</li>
+        <li>Reading the current value returned by {{MediaStreamTrack/getCaptureHandle}}.</li>
         <li>Registering an {{EventListener}} at {{MediaStreamTrack/oncapturehandlechange}}.</li>
       </ol>
       <section id="capture-handle">
@@ -268,45 +268,43 @@
           </dd>
         </dl>
       </section>
-      <section id="capture-handle-via-getsettings">
-        <h3>MediaTrackSettings.captureHandle</h3>
+      <section id="capture-handle-via-getcapturehandle">
+        <h3>MediaStreamTrack.getCaptureHandle()</h3>
         <p>
-          {{MediaTrackSettings}} is extended so that calling {{MediaStreamTrack/getSettings()}} on
-          tracks derived of screen-capture can now return an extended dictionary that also contains
-          a {{MediaTrackSettings/captureHandle}} entry.
+          Extend {{MediaStreamTrack}} with a method called {{MediaStreamTrack/getCaptureHandle}}.
+          When the {{MediaStreamTrack}} is a video track derived of screen-capture,
+          {{MediaStreamTrack/getCaptureHandle}} returns the latest [=observable=] {{CaptureHandle}}.
+          Otherwise it returns <code>null</code>.
         </p>
         <pre class="idl">
-          partial dictionary MediaTrackSettings {
-            CaptureHandle captureHandle;
+          partial interface MediaStreamTrack {
+            CaptureHandle? getCaptureHandle();
           };
         </pre>
-        <dl data-link-for="MediaTrackSettings" data-dfn-for="MediaTrackSettings">
+        <dl data-link-for="MediaStreamTrack" data-dfn-for="MediaStreamTrack">
           <dt>
-            <dfn>captureHandle</dfn>
+            <dfn>getCaptureHandle</dfn>
           </dt>
           <dd>
             <p>
-              {{MediaTrackSettings}} objects are produced in reponse to invocations of
-              {{MediaStreamTrack/getSettings()}}.
+              If the track in question is not a video track, or is not the result of a capture of a
+              <code>display surface</code>, then the user agent MUST return <code>null</code>.
             </p>
             <p>
-              If the track in question is not the result of a capture of a display surface, then the
-              user agent MUST NOT set a {{MediaTrackSettings/captureHandle}}.
-            </p>
-            <p>
-              If the captured application did not set a {{CaptureHandleConfig}}, or set it and then
-              unset it, then the user agent MUST leave {{MediaTrackSettings/captureHandle}} unset.
+              If the captured application did not set a {{CaptureHandleConfig}}, or if the last time
+              it set it to the empty {{CaptureHandleConfig}}, then the user agent MUST return
+              <code>null</code>.
             </p>
             <p>
               The user agent MUST compare the origin of the capturing document to those which the
               captured application listed in {{CaptureHandleConfig/permittedOrigins}}. If the
               capturing origin is not permitted to [=observable|observe=] the {{CaptureHandle}},
-              then the user agent MUST leave {{MediaTrackSettings/captureHandle}} unset.
+              then the user agent MUST return <code>null</code>.
             </p>
             <p>
-              If all previous validations passed, then the user agent MUST set
-              {{MediaTrackSettings/captureHandle}} to a {{CaptureHandle}} with the value which are
-              correct at the moment the {{MediaTrackSettings}} object is produced.
+              If all previous validations passed, then the user agent MUST return a
+              {{CaptureHandle}} dictionary with the values derived of the last
+              {{CaptureHandleConfig}} set by the captured application.
             </p>
           </dd>
         </dl>
