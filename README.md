@@ -1,3 +1,7 @@
+# TL;DR - Demos.
+1. Demo for remotely controlling a presentation [here](https://eladalon1983.github.io/capture-handle/demos/remote_control/capturer.html).
+2. Demo for detecting self-capture TODO.
+
 # Prelude
 For a version of this that is more comprehensive and easier to navigate thanks to internal links, please refer to [the explainer](https://docs.google.com/document/d/1oSDmBPYVlxFJxb7ZB_rV6yaAaYIBFDphbkx5bXLnzFg/edit?usp=sharing).
 
