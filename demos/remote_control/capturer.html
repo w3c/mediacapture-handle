@@ -9,18 +9,27 @@
         border: none;
         background: #1a73e8;
         color: #fff;
+        font-size: 24px;
         letter-spacing: 0.2px;
         margin: 6px;
         margin-top: 16px;
       }
 
+      h2 {
+        font-size: 30px;
+      }
+
+      h3 {
+        font-size: 27px;
+      }
+
       li {
-        font-size: 16px;
+        font-size: 24px;
       }
     </style>
 
     <link rel="icon" href="#" />
-    <title>Don't capture me!</title>
+    <title>Demo VC (don't capture)</title>
   </head>
   <body>
     <div style="text-align: center">
@@ -34,13 +43,26 @@
     </div>
     <div>
       <h2>Instructions:</h2>
+      <h3>Prerequisites:</h3>
+      <ol>
+        <li>Make sure you're running Chrome m92 or later.</li>
+        <li>
+          Either [Experimental Web Platform features] or launch the browser with
+          --enable-blink-features=CaptureHandle.
+        </li>
+      </ol>
+      <h3>Demo operation:</h3>
       <ol>
         <li>Open a new presentation by clicking Launch Presentation.</li>
         <li>Capture the tab in which the presentation is running.</li>
         <li>Switch back to this tab.</li>
         <li>Remotely control the other presentation using the previous/next buttons.</li>
       </ol>
-      <p>Try opening multiple instances. You'll only be controlling the one you capture.</p>
+      <h3>Worth trying:</h3>
+      <ul>
+        <li>Try opening multiple instances. You'll only be controlling the one you capture.</li>
+        <li>Try refreshing the captured tab. You can still control it.</li>
+      </ul>
     </div>
     <script>
       // Verify version. Unfortunately, since this is in Origin Trial, it went
