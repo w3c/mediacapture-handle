@@ -10,7 +10,8 @@
         background: #1a73e8;
         color: #fff;
         letter-spacing: 0.2px;
-        margin: 16px;
+        margin: 6px;
+        margin-top: 16px;
       }
 
       li {
@@ -42,6 +43,12 @@
       <p>Try opening multiple instances. You'll only be controlling the one you capture.</p>
     </div>
     <script>
+      // Verify version. Unfortunately, since this is in Origin Trial, it went
+      // through some changes between m92 and m93.
+      const newVersion =
+        navigator.userAgent.includes("Chrome/") &&
+        navigator.userAgent.split("Chrome/")[1].split(".")[0] >= 93;
+
       const video = document.getElementById("video");
       let captureHandle;
 
@@ -58,6 +65,12 @@
         window.open("captured.html");
       }
 
+      function getCaptureHandle(stream) {
+        return newVersion
+          ? stream.getVideoTracks()[0].getCaptureHandle()
+          : stream.getVideoTracks()[0].getSettings()["captureHandle"];
+      }
+
       async function onCaptureButtonClicked() {
         try {
           if (video.srcObject != null) {
@@ -67,14 +80,11 @@
           captureHandle = null;
           let stream = await navigator.mediaDevices.getDisplayMedia();
           video.srcObject = stream;
-          if (!stream.getVideoTracks()[0].getCaptureHandle) {
-            return;
-          }
           let [track] = stream.getVideoTracks();
           track.oncapturehandlechange = (event) => {
-            captureHandle = event.captureHandle();
+            captureHandle = newVersion ? event.captureHandle() : event.captureHandle;
           };
-          captureHandle = stream.getVideoTracks()[0].getCaptureHandle();
+          captureHandle = getCaptureHandle(stream);
         } catch (error) {}
       }
 
@@ -87,8 +97,10 @@
       }
 
       function sendInstruction(instruction) {
-        msg = JSON.stringify({ id: captureHandle.handle, instruction: instruction });
-        broadcastChannel.postMessage(msg);
+        if (captureHandle) {
+          msg = JSON.stringify({ id: captureHandle.handle, instruction: instruction });
+          broadcastChannel.postMessage(msg);
+        }
       }
     </script>
   </body>
