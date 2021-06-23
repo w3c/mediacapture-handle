@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="mobile-web-app-capable" content="no" />
+    <style>
+      body {
+        font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica,
+          Arial, "Lucida Grande", sans-serif;
+        font-weight: 300;
+      }
+
+      .fakeSlideDiv {
+        align-items: center;
+        border: 1px;
+        border-color: rgba(0, 0, 0, 0.3);
+        border-radius: 16px;
+        border-style: solid;
+        display: inline-flex;
+        justify-content: center;
+        text-align: center;
+      }
+    </style>
+
+    <link rel="icon" href="#" />
+    <title>ME-ME-ME Capture ME!</title>
+  </head>
+
+  <body>
+    <div style="text-align: center">
+      <h1>Preso Master 3000</h1>
+      <h2 id="focusMsg" style="color: red">
+        Switch back to the controlling tab to proceed with the demo.
+      </h2>
+      <div class="fakeSlideDiv" id="fakeSlideDiv">
+        <h2 id="fakeSlide" style="font-size: 15vmin"></h2>
+      </div>
+    </div>
+    <script>
+      // Set and expose an ID.
+      const ownId = Math.random().toString(36).substr(2, 9);
+      navigator.mediaDevices.setCaptureHandleConfig({ handle: ownId, permittedOrigins: ["*"] });
+
+      // Show "switch back to..." message when focused.
+      function onDocumentFocusChanged(focused) {
+        document.getElementById("focusMsg").hidden = !focused;
+      }
+      window.onfocus = () => {
+        onDocumentFocusChanged(true);
+      };
+      window.onblur = () => {
+        onDocumentFocusChanged(false);
+      };
+      onDocumentFocusChanged(document.hasFocus());
+
+      // Fake slide-show.
+      function updateSlide() {
+        let colors = ["#ffaaff", "#ccbbdd", "#ccddff", "#ffeedd", "#ccaaee", "#cceecc"];
+        fakeSlideDiv.style.backgroundColor = colors[slideNum % colors.length];
+        fakeSlideDiv.style.width = window.innerWidth * 0.75;
+        fakeSlideDiv.style.height = window.innerHeight * 0.75;
+        fakeSlide.innerText = `Slide #${slideNum}`;
+      }
+      let fakeSlide = document.getElementById("fakeSlide");
+      let fakeSlideDiv = document.getElementById("fakeSlideDiv");
+      let slideNum = 1;
+      window.addEventListener("resize", updateSlide);
+      updateSlide();
+
+      function onBroadcastChannelMessage(serializedMessage) {
+        try {
+          let msg = JSON.parse(serializedMessage.data);
+          if (msg.id != ownId) {
+            return;
+          } else if (msg.instruction == "prev" || msg.instruction == "next") {
+            slideNum = msg.instruction == "prev" ? Math.max(1, slideNum - 1) : slideNum + 1;
+            updateSlide();
+          }
+        } catch (error) {}
+      }
+
+      const broadcastChannel = new BroadcastChannel("capture-handle-demo");
+      broadcastChannel.onmessage = onBroadcastChannelMessage;
+    </script>
+  </body>
+</html>

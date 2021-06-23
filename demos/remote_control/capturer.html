@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="mobile-web-app-capable" content="no" />
+    <style>
+      button {
+        padding: 12px;
+        border-radius: 6px;
+        border: none;
+        background: #1a73e8;
+        color: #fff;
+        letter-spacing: 0.2px;
+        margin: 16px;
+      }
+
+      li {
+        font-size: 16px;
+      }
+    </style>
+
+    <link rel="icon" href="#" />
+    <title>Don't capture me!</title>
+  </head>
+  <body>
+    <div style="text-align: center">
+      <video id="video" autoplay playsinline style="border: solid"></video>
+    </div>
+    <div style="text-align: center">
+      <button id="launchPresoButton" onclick="onLaunchPresoButton();">Launch Presentation</button>
+      <button id="captureButton" onclick="onCaptureButtonClicked();">Capture</button>
+      <button id="PreviousButton" onclick="onPreviousButtonClicked();">Previous</button>
+      <button id="NextButton" onclick="onNextButtonClicked();">Next</button>
+    </div>
+    <div>
+      <h2>Instructions:</h2>
+      <ol>
+        <li>Open a new presentation by clicking Launch Presentation.</li>
+        <li>Capture the tab in which the presentation is running.</li>
+        <li>Switch back to this tab.</li>
+        <li>Remotely control the other presentation using the previous/next buttons.</li>
+      </ol>
+      <p>Try opening multiple instances. You'll only be controlling the one you capture.</p>
+    </div>
+    <script>
+      const video = document.getElementById("video");
+      let captureHandle;
+
+      const broadcastChannel = new BroadcastChannel("capture-handle-demo");
+
+      function updateVideoSize() {
+        video.width = window.innerWidth / 2;
+        video.height = window.innerHeight / 2;
+      }
+      window.addEventListener("resize", updateVideoSize);
+      updateVideoSize();
+
+      function onLaunchPresoButton() {
+        window.open("captured.html");
+      }
+
+      async function onCaptureButtonClicked() {
+        try {
+          if (video.srcObject != null) {
+            video.srcObject.getVideoTracks()[0].stop();
+            video.srcObject = null;
+          }
+          captureHandle = null;
+          let stream = await navigator.mediaDevices.getDisplayMedia();
+          video.srcObject = stream;
+          if (!stream.getVideoTracks()[0].getCaptureHandle) {
+            return;
+          }
+          let [track] = stream.getVideoTracks();
+          track.oncapturehandlechange = (event) => {
+            captureHandle = event.captureHandle();
+          };
+          captureHandle = stream.getVideoTracks()[0].getCaptureHandle();
+        } catch (error) {}
+      }
+
+      function onPreviousButtonClicked() {
+        sendInstruction("prev");
+      }
+
+      function onNextButtonClicked() {
+        sendInstruction("next");
+      }
+
+      function sendInstruction(instruction) {
+        msg = JSON.stringify({ id: captureHandle.handle, instruction: instruction });
+        broadcastChannel.postMessage(msg);
+      }
+    </script>
+  </body>
+</html>
