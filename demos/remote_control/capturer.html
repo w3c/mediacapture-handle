@@ -34,7 +34,7 @@
   </head>
   <body>
     <div style="text-align: center">
-      <video id="video" autoplay playsinline style="border: solid"></video>
+      <video id="video" autoplay playsinline style="border: solid; width: 50%"></video>
     </div>
     <div style="text-align: center">
       <button id="launchPresoButton" onclick="onLaunchPresoButton();">Launch Presentation</button>
@@ -48,7 +48,8 @@
       <ol>
         <li>Make sure you're running Chrome m92 or later.</li>
         <li>
-          Either [Experimental Web Platform features] or launch the browser with
+          If something isn't working, the Origin Trial on this demo might have expired. In that
+          case, either [Experimental Web Platform features] or launch the browser with
           --enable-blink-features=CaptureHandle.
         </li>
       </ol>
@@ -76,13 +77,6 @@
       let captureHandle;
 
       const broadcastChannel = new BroadcastChannel("capture-handle-demo");
-
-      function updateVideoSize() {
-        video.width = window.innerWidth / 2;
-        video.height = window.innerHeight / 2;
-      }
-      window.addEventListener("resize", updateVideoSize);
-      updateVideoSize();
 
       function onLaunchPresoButton() {
         window.open("captured.html");

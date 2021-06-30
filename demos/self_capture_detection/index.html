@@ -1,0 +1,188 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      http-equiv="origin-trial"
+      content="Av7r8k9ZfkW+XuXBOJJUQSMNNtEn+akbpFqWtB6hh8dbKcxFehS7fWxpMMttkWP7xTG1PU6J1q/Jxwb/gOjG0AEAAABdeyJvcmlnaW4iOiJodHRwczovL2VsYWRhbG9uMTk4My5naXRodWIuaW86NDQzIiwiZmVhdHVyZSI6IkNhcHR1cmVIYW5kbGUiLCJleHBpcnkiOjE2MzQwODMxOTl9"
+    />
+    <meta name="mobile-web-app-capable" content="no" />
+    <style>
+      button {
+        padding: 12px;
+        border-radius: 6px;
+        border: none;
+        background: #1a73e8;
+        color: #fff;
+        font-size: 24px;
+        letter-spacing: 0.2px;
+        margin: 6px;
+        margin-top: 16px;
+      }
+
+      h1 {
+        font-size: 50px;
+      }
+
+      h2 {
+        font-size: 30px;
+      }
+
+      h3 {
+        font-size: 27px;
+      }
+
+      li {
+        font-size: 24px;
+      }
+
+      .centerAligned {
+        align-items: center;
+        /* border: 1px;
+        border-color: rgba(0, 0, 0, 0.3);
+        border-radius: 16px;
+        border-style: solid; */
+        display: inline-flex;
+        justify-content: center;
+        text-align: center;
+      }
+    </style>
+
+    <link rel="icon" href="#" />
+    <title>Self-Capture Detection</title>
+  </head>
+  <body onload="update();">
+    <h1 style="text-align: center">Self-Capture Detection</h1>
+    <div class="centerAligned">
+      <video
+        id="video"
+        autoplay
+        playsinline
+        style="display: none; border: solid; width: 50%"
+      ></video>
+    </div>
+    <div id="self_capture_announcement" style="text-align: center; display: none">
+      <h2>Self-capture detected. Video suppressed to avoid the hall-of-mirrors effect.</h2>
+    </div>
+    <div id="tab_preferred_warning" style="display: none">
+      <h1 style="color: red; text-align: center">
+        This demo is more interesting when a tab is shared. :-)
+      </h1>
+    </div>
+    <div id="prerequisites" style="display: none">
+      <h3>Prerequisites:</h3>
+      <ol>
+        <li>Make sure you're running Chrome m92 or later.</li>
+        <li>
+          If something isn't working, the Origin Trial on this demo might have expired. In that
+          case, either [Experimental Web Platform features] or launch the browser with
+          --enable-blink-features=CaptureHandle.
+        </li>
+      </ol>
+    </div>
+    <div id="instructions" style="display: none">
+      <h3>Demo operation:</h3>
+      <ul>
+        <li>Capture any tab.</li>
+        <li>If you're capturing a different tab, the video will be played back to you here.</li>
+        <li>
+          If you're capturing the current tab, the hall-of-mirrors effect will be suppressed by NOT
+          playing the video back to you.
+        </li>
+        <li>
+          If you capture anything other than a tab, this demo is a bit irrelevant, so we'll just ask
+          you to try again.
+        </li>
+      </ul>
+    </div>
+    <div style="text-align: center">
+      <button id="captureButton" onclick="onCaptureButtonClicked();">Capture</button>
+    </div>
+    <script>
+      // Verify version. Unfortunately, since this is in Origin Trial, it went
+      // through some changes between m92 and m93.
+      const newVersion =
+        navigator.userAgent.includes("Chrome/") &&
+        navigator.userAgent.split("Chrome/")[1].split(".")[0] >= 93;
+
+      const video = document.getElementById("video");
+      const instructions = document.getElementById("instructions");
+      const self_capture_announcement = document.getElementById("self_capture_announcement");
+      const tab_preferred_warning = document.getElementById("tab_preferred_warning");
+      const prerequisites = document.getElementById("prerequisites");
+      let captureHandle;
+
+      const demoPossible = !!navigator.mediaDevices.setCaptureHandleConfig;
+      const ownId = Math.random().toString(36).substr(2, 9);
+      if (demoPossible) {
+        navigator.mediaDevices.setCaptureHandleConfig({ handle: ownId, permittedOrigins: ["*"] });
+      } else {
+        prerequisites.style.display = "";
+      }
+
+      function getCaptureHandle(stream) {
+        return newVersion
+          ? stream.getVideoTracks()[0].getCaptureHandle()
+          : stream.getVideoTracks()[0].getSettings()["captureHandle"];
+      }
+
+      function hideAll() {
+        video.style.display = "none";
+        instructions.style.display = "none";
+        self_capture_announcement.style.display = "none";
+        tab_preferred_warning.style.display = "none";
+        // |prerequisites| either always visible or always hidden.
+      }
+
+      function update() {
+        if (!demoPossible) {
+          return;
+        }
+
+        hideAll();
+
+        if (!video.srcObject) {
+          instructions.style.display = "";
+        } else if (video.srcObject.getVideoTracks()[0].getSettings().displaySurface != "browser") {
+          tab_preferred_warning.style.display = "";
+          video.srcObject.getVideoTracks()[0].stop();
+        } else if (!captureHandle || captureHandle.handle != ownId) {
+          video.style.display = "";
+        } else {
+          self_capture_announcement.style.display = "";
+          video.srcObject.getVideoTracks()[0].stop();
+        }
+      }
+
+      async function onCaptureButtonClicked() {
+        if (!demoPossible) {
+          return;
+        }
+
+        hideAll();
+
+        if (video.srcObject != null) {
+          video.srcObject.getVideoTracks()[0].stop();
+          video.srcObject = null;
+        }
+        captureHandle = null;
+
+        let stream;
+        try {
+          stream = await navigator.mediaDevices.getDisplayMedia();
+        } catch (error) {
+          update();
+          return;
+        }
+
+        video.srcObject = stream;
+        let [track] = stream.getVideoTracks();
+        track.oncapturehandlechange = (event) => {
+          captureHandle = newVersion ? event.captureHandle() : event.captureHandle;
+          update();
+        };
+        captureHandle = getCaptureHandle(stream);
+        update();
+      }
+    </script>
+  </body>
+</html>
