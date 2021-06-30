@@ -88,7 +88,7 @@
     </div>
     <div id="controls" style="text-align: center; display: none">
       <button id="captureButton" onclick="onCaptureButtonClicked();">Capture</button>
-      <button id="suppressButton" onclick="onSuppressHallOfMirrorsButtonClicked();">Suppressing Hall-of-Mirrors</button>
+      <button id="suppressButton" onclick="onSuppressHallOfMirrorsButtonClicked();"></button>
     </div>
     <script>
       // Verify version. Unfortunately, since this is in Origin Trial, it went
@@ -150,7 +150,7 @@
         }
         
         suppressButton.style.backgroundColor = suppressHallOfMirrors ? "green" : "red";
-        suppressButton.textContent = (suppressHallOfMirrors ? "Suppressing" : "Not suppressing") + " Hall-of-Mirrors";
+        suppressButton.textContent = (suppressHallOfMirrors ? "Suppressing" : "Not suppressing") + " Hall-of-Mirrors (click to toggle)";
       }
 
       async function onCaptureButtonClicked() {
