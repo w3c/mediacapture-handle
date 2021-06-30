@@ -86,8 +86,9 @@
         </li>
       </ul>
     </div>
-    <div style="text-align: center">
+    <div id="controls" style="text-align: center; display: none">
       <button id="captureButton" onclick="onCaptureButtonClicked();">Capture</button>
+      <button id="suppressButton" onclick="onSuppressHallOfMirrorsButtonClicked();">Suppressing Hall-of-Mirrors</button>
     </div>
     <script>
       // Verify version. Unfortunately, since this is in Origin Trial, it went
@@ -101,15 +102,19 @@
       const self_capture_announcement = document.getElementById("self_capture_announcement");
       const tab_preferred_warning = document.getElementById("tab_preferred_warning");
       const prerequisites = document.getElementById("prerequisites");
+      const controls = document.getElementById("controls");
+      const suppressButton = document.getElementById("suppressButton");
+      
+      let suppressHallOfMirrors = true;
       let captureHandle;
 
       const demoPossible = !!navigator.mediaDevices.setCaptureHandleConfig;
       const ownId = Math.random().toString(36).substr(2, 9);
       if (demoPossible) {
         navigator.mediaDevices.setCaptureHandleConfig({ handle: ownId, permittedOrigins: ["*"] });
+        controls.style.display = "";
       } else {
         prerequisites.style.display = "";
-        document.getElementById("captureButton").hidden = true;
       }
 
       function getCaptureHandle(stream) {
@@ -138,19 +143,17 @@
         } else if (video.srcObject.getVideoTracks()[0].getSettings().displaySurface != "browser") {
           tab_preferred_warning.style.display = "";
           video.srcObject.getVideoTracks()[0].stop();
-        } else if (!captureHandle || captureHandle.handle != ownId) {
+        } else if (!captureHandle || captureHandle.handle != ownId || !suppressHallOfMirrors) {
           video.style.display = "";
         } else {
           self_capture_announcement.style.display = "";
-          video.srcObject.getVideoTracks()[0].stop();
         }
+        
+        suppressButton.style.backgroundColor = suppressHallOfMirrors ? "green" : "red";
+        suppressButton.textContent = (suppressHallOfMirrors ? "Suppressing" : "Not suppressing") + " Hall-of-Mirrors";
       }
 
       async function onCaptureButtonClicked() {
-        if (!demoPossible) {
-          return;
-        }
-
         hideAll();
 
         if (video.srcObject != null) {
@@ -174,6 +177,11 @@
           update();
         };
         captureHandle = getCaptureHandle(stream);
+        update();
+      }
+
+      function onSuppressHallOfMirrorsButtonClicked() {
+        suppressHallOfMirrors = !suppressHallOfMirrors;
         update();
       }
     </script>
