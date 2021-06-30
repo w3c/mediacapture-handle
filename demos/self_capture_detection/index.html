@@ -129,6 +129,7 @@
         self_capture_announcement.style.display = "none";
         tab_preferred_warning.style.display = "none";
         // |prerequisites| either always visible or always hidden.
+        suppressButton.style.display = "none";
       }
 
       function update() {
@@ -138,19 +139,33 @@
 
         hideAll();
 
+        let isSelfCapture = captureHandle && captureHandle.handle == ownId
+        updateSelfCaptureButton(isSelfCapture);
+
         if (!video.srcObject) {
           instructions.style.display = "";
-        } else if (video.srcObject.getVideoTracks()[0].getSettings().displaySurface != "browser") {
+          return;
+        }
+      
+        if (video.srcObject.getVideoTracks()[0].getSettings().displaySurface != "browser") {
           tab_preferred_warning.style.display = "";
           video.srcObject.getVideoTracks()[0].stop();
-        } else if (!captureHandle || captureHandle.handle != ownId || !suppressHallOfMirrors) {
-          video.style.display = "";
-        } else {
-          self_capture_announcement.style.display = "";
+          return;
         }
         
-        suppressButton.style.backgroundColor = suppressHallOfMirrors ? "green" : "red";
-        suppressButton.textContent = (suppressHallOfMirrors ? "Suppressing" : "Not suppressing") + " Hall-of-Mirrors (click to toggle)";
+        if (isSelfCapture && suppressHallOfMirrors) {
+          self_capture_announcement.style.display = "";
+        } else {
+          video.style.display = "";
+        }
+      }
+
+      function updateSelfCaptureButton(isSelfCapture) {
+        suppressButton.style.display = isSelfCapture ? "" : "none";
+        if (isSelfCapture) {
+          suppressButton.style.backgroundColor = suppressHallOfMirrors ? "green" : "red";
+          suppressButton.textContent = (suppressHallOfMirrors ? "Suppressing" : "Not suppressing") + " Hall-of-Mirrors (click to toggle)";
+        }
       }
 
       async function onCaptureButtonClicked() {
