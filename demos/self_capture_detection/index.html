@@ -51,14 +51,9 @@
     <title>Self-Capture Detection</title>
   </head>
   <body onload="update();">
-    <h1 style="text-align: center">Self-Capture Detection</h1>
+    <h1 style="text-align: center">Self-Capture Detection Demo</h1>
     <div class="centerAligned">
-      <video
-        id="video"
-        autoplay
-        playsinline
-        style="display: none; border: solid; width: 50%"
-      ></video>
+      <video id="video" autoplay style="display: none; border: solid; width: 50%"></video>
     </div>
     <div id="self_capture_announcement" style="text-align: center; display: none">
       <h2>Self-capture detected. Video suppressed to avoid the hall-of-mirrors effect.</h2>
@@ -68,18 +63,15 @@
         This demo is more interesting when a tab is shared. :-)
       </h1>
     </div>
-    <div id="prerequisites" style="display: none">
-      <h3>Prerequisites:</h3>
-      <ol>
-        <li>Make sure you're running Chrome m92 or later.</li>
-        <li>
-          If something isn't working, the Origin Trial on this demo might have expired. In that
-          case, either [Experimental Web Platform features] or launch the browser with
-          --enable-blink-features=CaptureHandle.
-        </li>
-      </ol>
+    <div id="prerequisites" style="display: none; padding: 1%">
+      <li>Make sure you're running Chrome m92 or later.</li>
+      <li>
+        If you're seeing this despite using Chrome m92 or later, the Origin Trial on this demo might
+        have expired. In that case, either [Experimental Web Platform features] or launch the
+        browser with --enable-blink-features=CaptureHandle.
+      </li>
     </div>
-    <div id="instructions" style="display: none">
+    <div id="instructions" style="display: none; padding: 1%">
       <h3>Demo operation:</h3>
       <ul>
         <li>Capture any tab.</li>
@@ -117,6 +109,7 @@
         navigator.mediaDevices.setCaptureHandleConfig({ handle: ownId, permittedOrigins: ["*"] });
       } else {
         prerequisites.style.display = "";
+        document.getElementById("captureButton").hidden = true;
       }
 
       function getCaptureHandle(stream) {

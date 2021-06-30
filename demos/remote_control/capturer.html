@@ -1,7 +1,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="origin-trial" content="Av7r8k9ZfkW+XuXBOJJUQSMNNtEn+akbpFqWtB6hh8dbKcxFehS7fWxpMMttkWP7xTG1PU6J1q/Jxwb/gOjG0AEAAABdeyJvcmlnaW4iOiJodHRwczovL2VsYWRhbG9uMTk4My5naXRodWIuaW86NDQzIiwiZmVhdHVyZSI6IkNhcHR1cmVIYW5kbGUiLCJleHBpcnkiOjE2MzQwODMxOTl9">
+    <meta
+      http-equiv="origin-trial"
+      content="Av7r8k9ZfkW+XuXBOJJUQSMNNtEn+akbpFqWtB6hh8dbKcxFehS7fWxpMMttkWP7xTG1PU6J1q/Jxwb/gOjG0AEAAABdeyJvcmlnaW4iOiJodHRwczovL2VsYWRhbG9uMTk4My5naXRodWIuaW86NDQzIiwiZmVhdHVyZSI6IkNhcHR1cmVIYW5kbGUiLCJleHBpcnkiOjE2MzQwODMxOTl9"
+    />
     <meta name="mobile-web-app-capable" content="no" />
     <style>
       button {
@@ -14,6 +17,10 @@
         letter-spacing: 0.2px;
         margin: 6px;
         margin-top: 16px;
+      }
+
+      h1 {
+        font-size: 50px;
       }
 
       h2 {
@@ -33,38 +40,40 @@
     <title>Demo VC (don't capture)</title>
   </head>
   <body>
-    <div style="text-align: center">
-      <video id="video" autoplay playsinline style="border: solid; width: 50%"></video>
+    <div id="demo" style="display: none">
+      <div style="text-align: center">
+        <video id="video" autoplay playsinline style="border: solid; width: 50%"></video>
+      </div>
+      <div style="text-align: center">
+        <button id="launchPresoButton" onclick="onLaunchPresoButton();">Launch Presentation</button>
+        <button id="captureButton" onclick="onCaptureButtonClicked();">Capture</button>
+        <button id="PreviousButton" onclick="onPreviousButtonClicked();">Previous</button>
+        <button id="NextButton" onclick="onNextButtonClicked();">Next</button>
+      </div>
+      <div>
+        <h2>Instructions:</h2>
+        <h3>Demo operation:</h3>
+        <ol>
+          <li>Open a new presentation by clicking Launch Presentation.</li>
+          <li>Capture the tab in which the presentation is running.</li>
+          <li>Switch back to this tab.</li>
+          <li>Remotely control the other presentation using the previous/next buttons.</li>
+        </ol>
+        <h3>Worth trying:</h3>
+        <ul>
+          <li>Try opening multiple instances. You'll only be controlling the one you capture.</li>
+          <li>Try refreshing the captured tab. You can still control it.</li>
+        </ul>
+      </div>
     </div>
-    <div style="text-align: center">
-      <button id="launchPresoButton" onclick="onLaunchPresoButton();">Launch Presentation</button>
-      <button id="captureButton" onclick="onCaptureButtonClicked();">Capture</button>
-      <button id="PreviousButton" onclick="onPreviousButtonClicked();">Previous</button>
-      <button id="NextButton" onclick="onNextButtonClicked();">Next</button>
-    </div>
-    <div>
-      <h2>Instructions:</h2>
-      <h3>Prerequisites:</h3>
-      <ol>
-        <li>Make sure you're running Chrome m92 or later.</li>
-        <li>
-          If something isn't working, the Origin Trial on this demo might have expired. In that
-          case, either [Experimental Web Platform features] or launch the browser with
-          --enable-blink-features=CaptureHandle.
-        </li>
-      </ol>
-      <h3>Demo operation:</h3>
-      <ol>
-        <li>Open a new presentation by clicking Launch Presentation.</li>
-        <li>Capture the tab in which the presentation is running.</li>
-        <li>Switch back to this tab.</li>
-        <li>Remotely control the other presentation using the previous/next buttons.</li>
-      </ol>
-      <h3>Worth trying:</h3>
-      <ul>
-        <li>Try opening multiple instances. You'll only be controlling the one you capture.</li>
-        <li>Try refreshing the captured tab. You can still control it.</li>
-      </ul>
+    <div id="prerequisites" style="display: none; padding: 1%">
+      <h1 style="text-align: center">Remote Control using Capture Handle Demo</h1>
+      <li>Make sure you're running Chrome m92 or later.</li>
+      <li>
+        If you're seeing this despite using Chrome m92 or later, the Origin Trial on this demo might
+        have expired. In that case, either [Experimental Web Platform features] or launch the
+        browser with --enable-blink-features=CaptureHandle.
+      </li>
     </div>
     <script>
       // Verify version. Unfortunately, since this is in Origin Trial, it went
@@ -74,7 +83,13 @@
         navigator.userAgent.split("Chrome/")[1].split(".")[0] >= 93;
 
       const video = document.getElementById("video");
+      const demo = document.getElementById("demo");
+      const prerequisites = document.getElementById("prerequisites");
       let captureHandle;
+
+      const demoPossible = !!navigator.mediaDevices.setCaptureHandleConfig;
+      demo.style.display = demoPossible ? "" : "none";
+      prerequisites.style.display = demoPossible ? "none" : "";
 
       const broadcastChannel = new BroadcastChannel("capture-handle-demo");
 

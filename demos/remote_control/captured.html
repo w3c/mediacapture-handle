@@ -1,7 +1,10 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="origin-trial" content="Av7r8k9ZfkW+XuXBOJJUQSMNNtEn+akbpFqWtB6hh8dbKcxFehS7fWxpMMttkWP7xTG1PU6J1q/Jxwb/gOjG0AEAAABdeyJvcmlnaW4iOiJodHRwczovL2VsYWRhbG9uMTk4My5naXRodWIuaW86NDQzIiwiZmVhdHVyZSI6IkNhcHR1cmVIYW5kbGUiLCJleHBpcnkiOjE2MzQwODMxOTl9">
+    <meta
+      http-equiv="origin-trial"
+      content="Av7r8k9ZfkW+XuXBOJJUQSMNNtEn+akbpFqWtB6hh8dbKcxFehS7fWxpMMttkWP7xTG1PU6J1q/Jxwb/gOjG0AEAAABdeyJvcmlnaW4iOiJodHRwczovL2VsYWRhbG9uMTk4My5naXRodWIuaW86NDQzIiwiZmVhdHVyZSI6IkNhcHR1cmVIYW5kbGUiLCJleHBpcnkiOjE2MzQwODMxOTl9"
+    />
     <meta name="mobile-web-app-capable" content="no" />
     <style>
       body {
@@ -20,6 +23,14 @@
         justify-content: center;
         text-align: center;
       }
+
+      h1 {
+        font-size: 50px;
+      }
+
+      li {
+        font-size: 24px;
+      }
     </style>
 
     <link rel="icon" href="#" />
@@ -27,7 +38,7 @@
   </head>
 
   <body>
-    <div style="text-align: center">
+    <div id="demo" style="text-align: center">
       <h1>Preso Master 3000</h1>
       <h2 id="focusMsg" style="color: red">
         Switch back to the controlling tab to proceed with the demo.
@@ -36,7 +47,20 @@
         <h2 id="fakeSlide" style="font-size: 15vmin"></h2>
       </div>
     </div>
+    <div id="prerequisites" style="display: none; padding: 1%">
+      <h1 style="text-align: center">Remote Control using Capture Handle Demo</h1>
+      <li>Make sure you're running Chrome m92 or later.</li>
+      <li>
+        If you're seeing this despite using Chrome m92 or later, the Origin Trial on this demo might
+        have expired. In that case, either [Experimental Web Platform features] or launch the
+        browser with --enable-blink-features=CaptureHandle.
+      </li>
+    </div>
     <script>
+      const demoPossible = !!navigator.mediaDevices.setCaptureHandleConfig;
+      demo.style.display = demoPossible ? "" : "none";
+      prerequisites.style.display = demoPossible ? "none" : "";
+
       // Set and expose an ID.
       const ownId = Math.random().toString(36).substr(2, 9);
       navigator.mediaDevices.setCaptureHandleConfig({ handle: ownId, permittedOrigins: ["*"] });
