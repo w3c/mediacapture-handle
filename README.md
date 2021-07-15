@@ -183,6 +183,11 @@ It is possible for a captured application to “bombard” its capturer with eve
 ## Incognito Mode
 Calls to setCaptureHandleConfig from an incognito tab must not be blocked, so as to avoid exposing incognito-status to the application. However, we avoid propagating the actual CaptureHandle between the capturing app and the captured app.
 
+# Upcoming Extensions
+* The current Capture Handle only applies to tab-capture.
+* It is possible to extending the concept to browser windows, where the captured window's active tab determines the capture-handle.
+* Extensions to native applications are possible, but are trickier, likely requiring OS-level support.
+
 # Goals and Non-Goals
 
 Communication often presupposes that both sides can recognize each other. Previously, a capturing application had no way to ergonomically and reliably detect which application was captured.  It is this gap that we seek to address - **identification**. How communication proceeds is left entirely in the hands of the capturing+captured applications.
