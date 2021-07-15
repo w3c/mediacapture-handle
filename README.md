@@ -116,7 +116,10 @@ The capturing application, VC-MAX, reads the capture-handle of the captured disp
     if (protocol != "loonyAPI" || version > "2.02") {
       return;
     }
-    ExposeSlides300Controls(sessionId);  // Exposes prev/next buttons to the user.
+    // Exposes prev/next buttons to the user. When clicked, these send
+    // a message to some REST API, where |sessionId| indicates that the
+    // message has to be relayed to the Slides 3000 session in question.
+    ExposeSlides300Controls(sessionId);
   }
 ```
 
