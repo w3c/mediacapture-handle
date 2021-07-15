@@ -201,15 +201,15 @@ Two noteworthy possible ways for communication to proceed are [BroadcastChannel]
 Add a [MessageChannel](https://developer.mozilla.org/en-US/docs/Web/API/MessageChannel) to the MediaStreamTrack and allow the two applications to communicate directly.
 
 ### Drawbacks
-This proposal lacks a convenient way for the capturing application to identify the captured application, and determine the protocol needed for communication. (I.e. what messages may be sent, that would be understood.)
-
-If this approach is extended to include controlled exposure of the captured application's origin, then the approach becomes a more complex variant of Capture Handle, that also requires at least one RTT between the apps before anything useful can be done by the capturing application. (This limits the usefulness of Capture Handle for the upcoming Conditional Focus feature - link pending.)
+* This proposal lacks a convenient way for the capturing application to identify the captured application, and determine the protocol needed for communication. (I.e. what messages may be sent, that would be understood.)
+* If this approach is extended to include controlled exposure of the captured application's origin, then the approach becomes a more complex variant of Capture Handle, that also requires at least one RTT between the apps before anything useful can be done by the capturing application. (This limits the usefulness of Capture Handle for the upcoming Conditional Focus feature - link pending.)
+* In either case, the capturing application is forced to alert the captured application to the presence of a display-capture session.
+* Difficulties arise when considering that capture sessions can stop, restart, and that multiple applications could be capturing the same tab - but that the browser does not wish to alert the captured application to any of these developments. (It's OK if the capturing application does that, though.)
 
 ## Rejected Alternative #2: On-Rails Approach
 ### Idea
 Define a closed set of messages that can be sent from the capturer to the captured, e.g. by extending `MediaStreamTrack ` with a `jumpToSlide(num)` method.
 
 ### Drawbacks
-This is a very partial solution, addressing only the subset of use-case #1 where the captured application has slides. Even then, it is unlikely that our imagination is going to be enough to think of all required actions, express them all in the form of simple actions with predetermined parameters. 
-
-The lack of an identification mechanism, and therefore of an authentication mechanism, means that collaboration between the capturing and captured applications would be limited to a set of simple, unprivileged actions which the captured application would be willing to accept from an arbitrary capturing application.
+* This is a very partial solution, addressing only the subset of use-case #1 where the captured application has slides. Even then, it is unlikely that our imagination is going to be enough to think of all required actions, express them all in the form of simple actions with predetermined parameters. 
+* The lack of an identification mechanism, and therefore of an authentication mechanism, means that collaboration between the capturing and captured applications would be limited to a set of simple, unprivileged actions which the captured application would be willing to accept from an arbitrary capturing application.
