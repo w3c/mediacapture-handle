@@ -120,7 +120,7 @@
       function getCaptureHandle(stream) {
         return newVersion
           ? stream.getVideoTracks()[0].getCaptureHandle()
-          : stream.getVideoTracks()[0].getSettings()["captureHandle"];
+          : stream.getVideoTracks()[0].getSettings().captureHandle;
       }
 
       function hideAll() {
