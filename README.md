@@ -214,3 +214,12 @@ Define a closed set of messages that can be sent from the capturer to the captur
 ### Drawbacks
 * This is a very partial solution, addressing only the subset of use-case #1 where the captured application has slides. Even then, it is unlikely that our imagination is going to be enough to think of all required actions, express them all in the form of simple actions with predetermined parameters. 
 * The lack of an identification mechanism, and therefore of an authentication mechanism, means that collaboration between the capturing and captured applications would be limited to a set of simple, unprivileged actions which the captured application would be willing to accept from an arbitrary capturing application.
+
+# API Changelog
+
+## Chrome m92
+API introduced and exposed as an origin trial.
+
+## Chrome m93
+* Capture handle previously exposed `track.getSettings().captureHandle`; now as `track.getCaptureHandle()`.
+* Events previously contained the capture handle as `event.captureHandle`, now as `event.captureHandle()`.
