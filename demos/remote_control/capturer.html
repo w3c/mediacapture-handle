@@ -117,6 +117,14 @@
             captureHandle = newVersion ? event.captureHandle() : event.captureHandle;
           };
           captureHandle = getCaptureHandle(stream);
+          if (!!track.focus && captureHandle) {
+            // Piggybacking a Conditional Focus demo on top.
+            // See https://eladalon1983.github.io/conditional-focus/ for details.
+            // Note - you can make the criteria for focusing/no-focus infinitely
+            // more complex, and depend on the actual contents of the captureHandle
+            // rather than merely on its presence.
+            track.focus("no-focus-change");
+          }
         } catch (error) {}
       }
 
