@@ -67,7 +67,7 @@ The captured application may control which capturing applications are allowed to
 Consider the case of a conference call on **VC-MAX** where the local user chooses to present another tab with a slides deck by **Slides 3000**. 
 
 The captured application, Slides 3000, is aware it could be captured:
-```
+```js
 function getlSessionId() {
   ...  // Returns some ID which is meaningful using loonyAPI.
 }
@@ -89,7 +89,7 @@ function onPageLoaded() {
 ```
 
 The capturing application, VC-MAX, reads the capture-handle of the captured display-surface the user chose:
-```
+```js
   function startCapture() {
     ...
     const stream = await navigator.mediaDevices.getDisplayMedia();
