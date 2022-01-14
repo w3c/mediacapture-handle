@@ -82,7 +82,7 @@ function onPageLoaded() {
       version: "1.983",
       sessionId: getSessionId(),
     }),
-    permittedOrigins = ['*']
+    permittedOrigins: ['*']
   });
   ...
 }
