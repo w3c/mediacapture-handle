@@ -68,7 +68,7 @@ Consider the case of a conference call on **VC-MAX** where the local user choose
 
 The captured application, Slides 3000, is aware it could be captured:
 ```js
-function getlSessionId() {
+function getSessionId() {
   ...  // Returns some ID which is meaningful using loonyAPI.
 }
 
@@ -80,7 +80,7 @@ function onPageLoaded() {
       description: "See slides-3000.com for our API. Collaborations welcome!",
       protocol: "loonyAPI",
       version: "1.983",
-      sessionId: getlSessionId(),
+      sessionId: getSessionId(),
     }),
     permittedOrigins = ['*']
   });
