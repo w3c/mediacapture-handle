@@ -47,13 +47,15 @@
       <section id="use-case-1">
         <h3>Use-case #1: Cross-App Communications</h3>
         <p>
-          Consider two applications that wish to cooperate, for example a VC app and a presentation
+          Consider two applications: a VC app and a presentation
           app. Assume the user is in a VC session. The user starts sharing a presentation. Both
           applications are interested in letting the VC app discover that it is capturing a slides
           session, which application, and even which session, so that the VC application will be
           able to expose controls to the user for flipping through slides. When the user clicks
           those controls, the VC app will be able to send messages to the presentation app (either
-          through a service worker or through a shared back-end infrastructure). These messages will
+          through a standardized API for rudimentary control over any participating presentation,
+          or through tight integration over a service worker or a shared back-end infrastructure
+          for more sophisticated controls than what is currently standardized). These messages will
           instruct the presentation app to flip through slides, enter/leave presentation-mode, etc.
         </p>
       </section>
