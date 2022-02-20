@@ -97,15 +97,15 @@ The capturing application, VC-MAX, reads the capture-handle of the captured disp
     if (track.getCaptureHandle) {  // Feature detection.
       // Subscribe to notifications of the capture-handle changing.
       track.oncapturehandlechange = (event) => {
-        OnNewCaputreHandle(event.captureHandle());
+        OnNewCaptureHandle(event.captureHandle());
       };
       // Read the current capture-handle.
-      OnNewCaputreHandle(track.getCaptureHandle());
+      OnNewCaptureHandle(track.getCaptureHandle());
     }
     ...
   }
 
-  function OnNewCaputreHandle(captureHandle) {
+  function OnNewCaptureHandle(captureHandle) {
     if (captureHandle.origin == 'slides-3000.com') {
       const parsed = JSON.parse(captureHandle.handle);
       OnNewSlides300Session(parsed.protocol, parsed.version, parsed.sessionId);
