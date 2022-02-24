@@ -86,292 +86,6 @@
         </p>
       </section>
     </section>
-    <section id="capture-handle-identification-actions">
-      <h2>The Capture-Handle Actions Mechanism</h2>
-      <p>
-        The capture-handle actions mechanism consists of two parts - one on the captured side, one on
-        the capturing side.
-      </p>
-      <ul>
-        <li>
-          <a href="#captured-side-actions">Captured applications</a> opt-in by registering support for
-          standard actions they handle by calling {{MediaDevices/setSupportedCaptureActions}}.
-        </li>
-        <li>
-          <a href="#capturing-side-actions">Capturing applications</a> may trigger these actions using
-          {{MediaStreamTrack/sendCaptureAction}}.
-        </li>
-      </ul>
-      <div class="note">
-        There is disagreement on whether actions should be specified here or in a separate document.
-      </div>
-    </section>
-    <section id="captured-side-actions">
-      <h2>Captured Side for Actions</h2>
-      <p>
-        Applications in top-level documents can declare the [=capture actions=]
-        they support, if any. They would typically do so before even knowing if
-        they are being captured. These actions enable the user to control the
-        progression of the captured session without leaving the capturer document.
-        Supported actions are declared by calling {{MediaDevices/setSupportedCaptureActions}}
-        with an array of the names of actions the application is prepared to respond to.
-      </p>
-      <section id="set-supported-capture-actions">
-        <h3>Registering and responding to capture actions</h3>
-        <p>
-          {{MediaDevices}} is extended with a method - {{MediaDevices/setSupportedCaptureActions}} -
-          which accepts an array of {{DOMString}}s. By calling this method, an application
-          registers with the user agent a set of zero or more [=capture actions=] it wishes to
-          respond to.
-        </p>
-        <p>
-          <dfn>Capture actions</dfn> are values defined in {{CaptureAction}}.
-          They are meant to be interpreted as instructions from the user (through the user agent)
-          to control the advancement of the presentation of the captured session, however the
-          captured application wishes to define this. Actions are designed to originate from the
-          user through interactive controls provided by the capturer document, where they
-          [=consume user activation=].
-        </p>
-        <pre class="idl">
-          partial interface MediaDevices {
-            undefined setSupportedCaptureActions(sequence&lt;DOMString&gt; actions);
-            attribute EventHandler oncaptureaction;
-          };
-
-          enum CaptureAction {
-            "next",
-            "previous",
-            "first",
-            "last"
-          };
-        </pre>
-        <dl data-link-for="MediaDevices" data-dfn-for="MediaDevices" class="methods">
-          <dt>
-            <dfn>setSupportedCaptureActions</dfn>
-          </dt>
-          <dd>
-            <p>When this method is invoked, the user agent MUST run the following steps:</p>
-            <ol>
-              <li>
-                If the [=relevant settings object=]'s
-                [=environment settings object/responsible document=] is either not
-                [=Document/fully active=] or its [=browsing context=] is not a
-                [=top-level browsing context=], then throw {{InvalidAccessError}}.
-              </li>
-              <li>
-                Let |actions| be the method's first argument.
-              </li>
-              <li>
-                If |actions| is non-empty, and this method was previously
-                called with a non-empty array on [=this=] {{MediaDevices}} object,
-                then throw {{InvalidStateError}}.
-              </p>
-              <li>
-                Remove from |actions| any value not found in {{CaptureAction}}.
-              </li>
-              <li>
-                Remove from |actions| any duplicates.
-              </li>
-              <li>
-                Set [=this=]'s {{MediaDevices/[[RegisteredCaptureActions]]}} to |actions|.
-              </li>
-              <li>
-                return `undefined` and run the remaining step [=in parallel=].
-              </li>
-              <li>
-                If this document is currently being captured as part of a
-                <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
-                <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>,
-                then for each capturer of that surface, queue a task on that capturer's
-                task-list to set all associated video {{MediaStreamTrack}}s'
-                {{MediaDevices/[[AvailableCaptureActions]]}} to |actions|.
-              </li>
-            </ul>
-          </dd>
-        </dl>
-        <dl data-link-for="MediaDevices" data-dfn-for="MediaDevices" class="attributes">
-          <dt><dfn>oncaptureaction</dfn> of type {{EventHandler}}</dt>
-          <dd>
-            <p>The event type of this event handler is `"captureaction"`.</p>
-          </dd>
-        </dl>
-        <p>
-          When {{MediaDevices}} is created, give it a
-          <dfn data-dfn-for="MediaDevices">[[\RegisteredCaptureActions]]</dfn> internal slot,
-          initialized to an empty list.
-        </p>
-      </section>
-      <section id="action-event">
-        <h3>Capture Action Event</h3>
-        <section id="capture-handle-action-event">
-          <h4><dfn>CaptureActionEvent</dfn></h4>
-          <p>
-            This event is fired on the captured application's {{MediaDevices}}
-            object whenever an action it registered with
-            {{MediaDevices/setSupportedCaptureActions}} has been triggered. This
-            lets the application respond by executing its implementation of this
-            action.
-          </p>
-          <pre class="idl">
-            [Exposed=Window]
-            interface CaptureActionEvent : Event {
-              constructor(CaptureActionEventInit init);
-              readonly attribute CaptureAction action;
-            };
-          </pre>
-          <dl data-link-for="CaptureActionEvent" data-dfn-for="CaptureActionEvent">
-            <dt>
-              <dfn>action</dfn>
-            </dt>
-            <dd>
-              The {{CaptureAction}} that was triggered.
-            </dd>
-          </dl>
-        </section>
-        <section>
-          <h4><dfn>CaptureActionEventInit</dfn></h4>
-          <pre class="idl">
-            dictionary CaptureActionEventInit : EventInit {
-              CaptureAction action;
-            };
-          </pre>
-          <dl
-            data-link-for="CaptureActionEventInit"
-            data-dfn-for="CaptureActionEventInit"
-          >
-            <dt>
-              <dfn>action</dfn>
-            </dt>
-            <dd>
-              The {{CaptureAction}} to initialize the event with.
-            </dd>
-          </dl>
-        </section>
-      </section>
-    </section>
-    <section id="capturing-side-actions">
-      <h2>Capturing Side for Actions</h2>
-      <p>
-        Capturing applications can enumerate available [=capture actions=] that
-        are supported on the video track they have obtained, by using
-        {{MediaStreamTrack/getSupportedCaptureActions}}, and can trigger those
-        actions by using {{MediaStreamTrack/sendCaptureAction}}.</li>
-      </ol>
-      <section id="capture-handle-get-supported-actions">
-        <h3>Enumerating supported actions and triggering them</h3>
-        <p>
-          When a {{MediaStreamTrack}} is a video track derived from screen-capture
-          of a <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
-          <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>,
-          {{MediaStreamTrack/getSupportedCaptureActions}} returns the set of
-          available [=capture actions=], if any, supported by the captured
-          application associated with this video track.
-        </p>
-        <pre class="idl">
-          partial interface MediaStreamTrack {
-            sequence&lt;DOMString&gt; getSupportedCaptureActions();
-            Promise&lt;undefined&gt; sendCaptureAction(CaptureAction action);
-          };
-        </pre>
-        <dl data-link-for="MediaStreamTrack" data-dfn-for="MediaStreamTrack">
-          <dt>
-            <dfn>getSupportedCaptureActions</dfn>
-          </dt>
-          <dd>
-            <p>When this method is invoked, the user agent MUST return [=this=]'
-            {{MediaDevices/[[AvailableCaptureActions]]}} if defined, or `[]` if not defined.</p>
-          </dd>
-          <dt>
-            <dfn>sendCaptureAction</dfn>
-          </dt>
-          <dd>
-            <p>When this method is invoked, the user agent MUST run the following steps:</p>
-            <ol>
-              <li>
-                If the [=relevant global object=] of [=this=] does not have
-                [=transient activation=], return a promise [=rejected=] with
-                {{InvalidStateError}}.
-              </li>
-              <li>
-                [=Consume user activation=].
-              </li>
-              <li>
-                Let |action| be the method's first argument.
-              </li>
-              <li>
-                If |action| is not in [=this=]' {{MediaDevices/[[AvailableCaptureActions]]}},
-                return a promise [=rejected=] with {{NotFoundError}}.
-              </li>
-              <li>
-                Let |p| be a new promise.
-              </li>
-              <li>
-                Run the following steps in parallel:
-                <ol>
-                  <li>
-                    <p>
-                      Queue a task on the task-list of the captured
-                      <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
-                      <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>'s
-                      [=top-level browsing context=]'s [=active document=] to run the
-                      following steps:
-                    </p>
-                    <ol>
-                      <li>
-                        Let |target| be the the [=relevant settings object=]'s
-                        [=environment settings object/responsible document=]'s
-                        associated navigator's {{MediaDevices}} object.
-                      <li>
-                        If |action| is not in |target|'s
-                        {{MediaDevices/[[RegisteredCaptureActions]]}}, abort these steps.
-                      <li>
-                        [=Fire an event=] named `"captureaction"`, using a
-                        {{CaptureActionEvent}} with {{CaptureActionEventInit/action}}
-                        set to |action|, at |target|.
-                      </li>
-                    </ol>
-                    <li>
-                      Wait for the event to have been fired.
-                    </li>
-                    <li>
-                      Resolve |p|.
-                    </li>
-                  </li>
-                </ol>
-              </li>
-              <li>
-                Return |p|.
-              </li>
-            </ol>
-          </dd>
-        </dl>
-        <p>
-          When a video {{MediaStreamTrack}} is created as part of the
-          <a data-cite="SCREEN-CAPTURE#dom-mediadevices-getdisplaymedia">getDisplayMedia</a>
-          algorithm, whose source is a
-          <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
-          <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>,
-          give it an
-          <dfn data-dfn-for="MediaDevices">[[\AvailableCaptureActions]]</dfn> internal
-          slot, initialized to the captured
-          <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
-          <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>'s
-          [=top-level browsing context=]'s [=Browsing context/active window=]'s
-          associated navigator's {{MediaDevices}} object's
-          {{MediaDevices/[[RegisteredCaptureActions]]}}.
-        </p>
-        <p>
-          While capture of a
-          <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
-          <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>
-          is occurring, whenever that surface's
-          [=top-level browsing context=] is navigated, then for each capturer of
-          that surface, queue a task on that capturer's task-list to set all
-          associated video {{MediaStreamTrack}}s'
-          {{MediaDevices/[[AvailableCaptureActions]]}} to `[]`.
-        </p>
-      </section>
-    </section>
     <section id="capture-handle-identification-mechanism">
       <h2>The Capture-Handle Identification Mechanism</h2>
       <p>
@@ -388,16 +102,15 @@
           {{CaptureHandle}}.
         </li>
       </ul>
-    </section>
     <section id="captured-side-identification">
-      <h2>Captured Side for Identification</h2>
+      <h3>Captured Side for Identification</h3>
       <p>
         Applications are allowed to expose information to capturing applications. They would
         typically do so before knowing if they even are captured. The mechanism used is calling
         {{MediaDevices/setCaptureHandleConfig}} with an appropriate {{CaptureHandleConfig}}.
       </p>
       <section id="capture-handle-config">
-        <h3><dfn>CaptureHandleConfig</dfn></h3>
+        <h4><dfn>CaptureHandleConfig</dfn></h4>
         <p>
           The CaptureHandleConfig dictionary is used to instruct the user agent what information the
           captured application intends to expose, and to which applications it is willing to expose
@@ -451,7 +164,7 @@
         </dl>
       </section>
       <section id="set-capture-handle-config">
-        <h3>MediaDevices.setCaptureHandleConfig()</h3>
+        <h4>MediaDevices.setCaptureHandleConfig()</h4>
         <p>
           {{MediaDevices}} is extended with a method - {{MediaDevices/setCaptureHandleConfig}} -
           which accepts a {{CaptureHandleConfig}} object. By calling this method, an application
@@ -508,7 +221,7 @@
       </section>
     </section>
     <section id="capturing-side-identification">
-      <h2>Capturing Side for Identification</h2>
+      <h3>Capturing Side for Identification</h3>
       <p>
         Capturing applications who are permitted to [=observable|observe=] a track's
         {{CaptureHandle}} have two ways of reading it.
@@ -518,7 +231,7 @@
         <li>Registering an {{EventListener}} at {{MediaStreamTrack/oncapturehandlechange}}.</li>
       </ol>
       <section id="capture-handle">
-        <h3><dfn>CaptureHandle</dfn></h3>
+        <h4><dfn>CaptureHandle</dfn></h4>
         <p>
           The user agent exposes information about the captured application to the capturing
           application through the {{CaptureHandle}} dictionary. Note that a {{CaptureHandle}} object
@@ -555,7 +268,7 @@
         </dl>
       </section>
       <section id="capture-handle-via-getcapturehandle">
-        <h3>MediaStreamTrack.getCaptureHandle()</h3>
+        <h4>MediaStreamTrack.getCaptureHandle()</h4>
         <p>
           Extend {{MediaStreamTrack}} with a method called {{MediaStreamTrack/getCaptureHandle}}.
           When the {{MediaStreamTrack}} is a video track derived of screen-capture,
@@ -596,9 +309,9 @@
         </dl>
       </section>
       <section id="on-change-event">
-        <h3>On-Change Event</h3>
+        <h4>On-Change Event</h4>
         <section id="capture-handle-change-event">
-          <h4><dfn>CaptureHandleChangeEvent</dfn></h4>
+          <h5><dfn>CaptureHandleChangeEvent</dfn></h5>
           <p>
             Whenever the [=observable=] {{CaptureHandle}} for a given capturing application changes,
             the user agent fires an event of type CaptureHandleChangeEvent. This can happen in the
@@ -638,7 +351,7 @@
           </dl>
         </section>
         <section>
-          <h4><dfn>CaptureHandleChangeEventInit</dfn></h4>
+          <h5><dfn>CaptureHandleChangeEventInit</dfn></h5>
           <pre class="idl">
             dictionary CaptureHandleChangeEventInit : EventInit {
               CaptureHandle captureHandle;
@@ -657,7 +370,7 @@
           </dl>
         </section>
         <section id="oncapturehandlechange">
-          <h4><dfn>oncapturehandlechange</dfn></h4>
+          <h5><dfn>oncapturehandlechange</dfn></h5>
           <p>
             {{MediaStreamTrack}} is extended with an {{EventListener}} called
             {{oncapturehandlechange}}.
@@ -675,6 +388,293 @@
               <p>{{EventHandler}} for events of type {{CaptureHandleChangeEvent}}.</p>
             </dd>
           </dl>
+        </section>
+      </section>
+    </section>
+    </section>
+    <section id="capture-handle-identification-actions">
+      <h2>The Capture-Handle Actions Mechanism</h2>
+      <p>
+        The capture-handle actions mechanism consists of two parts - one on the captured side, one on
+        the capturing side.
+      </p>
+      <ul>
+        <li>
+          <a href="#captured-side-actions">Captured applications</a> opt-in by registering support for
+          standard actions they handle by calling {{MediaDevices/setSupportedCaptureActions}}.
+        </li>
+        <li>
+          <a href="#capturing-side-actions">Capturing applications</a> may trigger these actions using
+          {{MediaStreamTrack/sendCaptureAction}}.
+        </li>
+      </ul>
+      <div class="note">
+        There is disagreement on whether actions should be specified here or in a separate document.
+      </div>
+      <section id="captured-side-actions">
+        <h3>Captured Side for Actions</h3>
+        <p>
+          Applications in top-level documents can declare the [=capture actions=]
+          they support, if any. They would typically do so before even knowing if
+          they are being captured. These actions enable the user to control the
+          progression of the captured session without leaving the capturer document.
+          Supported actions are declared by calling {{MediaDevices/setSupportedCaptureActions}}
+          with an array of the names of actions the application is prepared to respond to.
+        </p>
+        <section id="set-supported-capture-actions">
+          <h4>Registering and responding to capture actions</h4>
+          <p>
+            {{MediaDevices}} is extended with a method - {{MediaDevices/setSupportedCaptureActions}} -
+            which accepts an array of {{DOMString}}s. By calling this method, an application
+            registers with the user agent a set of zero or more [=capture actions=] it wishes to
+            respond to.
+          </p>
+          <p>
+            <dfn>Capture actions</dfn> are values defined in {{CaptureAction}}.
+            They are meant to be interpreted as instructions from the user (through the user agent)
+            to control the advancement of the presentation of the captured session, however the
+            captured application wishes to define this. Actions are designed to originate from the
+            user through interactive controls provided by the capturer document, where they
+            [=consume user activation=].
+          </p>
+          <pre class="idl">
+            partial interface MediaDevices {
+              undefined setSupportedCaptureActions(sequence&lt;DOMString&gt; actions);
+              attribute EventHandler oncaptureaction;
+            };
+
+            enum CaptureAction {
+              "next",
+              "previous",
+              "first",
+              "last"
+            };
+          </pre>
+          <dl data-link-for="MediaDevices" data-dfn-for="MediaDevices" class="methods">
+            <dt>
+              <dfn>setSupportedCaptureActions</dfn>
+            </dt>
+            <dd>
+              <p>When this method is invoked, the user agent MUST run the following steps:</p>
+              <ol>
+                <li>
+                  If the [=relevant settings object=]'s
+                  [=environment settings object/responsible document=] is either not
+                  [=Document/fully active=] or its [=browsing context=] is not a
+                  [=top-level browsing context=], then throw {{InvalidAccessError}}.
+                </li>
+                <li>
+                  Let |actions| be the method's first argument.
+                </li>
+                <li>
+                  If |actions| is non-empty, and this method was previously
+                  called with a non-empty array on [=this=] {{MediaDevices}} object,
+                  then throw {{InvalidStateError}}.
+                </p>
+                <li>
+                  Remove from |actions| any value not found in {{CaptureAction}}.
+                </li>
+                <li>
+                  Remove from |actions| any duplicates.
+                </li>
+                <li>
+                  Set [=this=]'s {{MediaDevices/[[RegisteredCaptureActions]]}} to |actions|.
+                </li>
+                <li>
+                  return `undefined` and run the remaining step [=in parallel=].
+                </li>
+                <li>
+                  If this document is currently being captured as part of a
+                  <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+                  <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>,
+                  then for each capturer of that surface, queue a task on that capturer's
+                  task-list to set all associated video {{MediaStreamTrack}}s'
+                  {{MediaDevices/[[AvailableCaptureActions]]}} to |actions|.
+                </li>
+              </ul>
+            </dd>
+          </dl>
+          <dl data-link-for="MediaDevices" data-dfn-for="MediaDevices" class="attributes">
+            <dt><dfn>oncaptureaction</dfn> of type {{EventHandler}}</dt>
+            <dd>
+              <p>The event type of this event handler is `"captureaction"`.</p>
+            </dd>
+          </dl>
+          <p>
+            When {{MediaDevices}} is created, give it a
+            <dfn data-dfn-for="MediaDevices">[[\RegisteredCaptureActions]]</dfn> internal slot,
+            initialized to an empty list.
+          </p>
+        </section>
+        <section id="action-event">
+          <h3>Capture Action Event</h3>
+          <section id="capture-handle-action-event">
+            <h4><dfn>CaptureActionEvent</dfn></h4>
+            <p>
+              This event is fired on the captured application's {{MediaDevices}}
+              object whenever an action it registered with
+              {{MediaDevices/setSupportedCaptureActions}} has been triggered. This
+              lets the application respond by executing its implementation of this
+              action.
+            </p>
+            <pre class="idl">
+              [Exposed=Window]
+              interface CaptureActionEvent : Event {
+                constructor(CaptureActionEventInit init);
+                readonly attribute CaptureAction action;
+              };
+            </pre>
+            <dl data-link-for="CaptureActionEvent" data-dfn-for="CaptureActionEvent">
+              <dt>
+                <dfn>action</dfn>
+              </dt>
+              <dd>
+                The {{CaptureAction}} that was triggered.
+              </dd>
+            </dl>
+          </section>
+          <section>
+            <h4><dfn>CaptureActionEventInit</dfn></h4>
+            <pre class="idl">
+              dictionary CaptureActionEventInit : EventInit {
+                DOMString action;
+              };
+            </pre>
+            <dl
+              data-link-for="CaptureActionEventInit"
+              data-dfn-for="CaptureActionEventInit"
+            >
+              <dt>
+                <dfn>action</dfn>
+              </dt>
+              <dd>
+                The {{CaptureAction}} to initialize the event with.
+              </dd>
+            </dl>
+          </section>
+        </section>
+      </section>
+      <section id="capturing-side-actions">
+        <h3>Capturing Side for Actions</h3>
+        <p>
+          Capturing applications can enumerate available [=capture actions=] that
+          are supported on the video track they have obtained, by using
+          {{MediaStreamTrack/getSupportedCaptureActions}}, and can trigger those
+          actions by using {{MediaStreamTrack/sendCaptureAction}}.
+        </p>
+        <section id="capture-handle-get-supported-actions">
+          <h4>Enumerating supported actions and triggering them</h4>
+          <p>
+            When a {{MediaStreamTrack}} is a video track derived from screen-capture
+            of a <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+            <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>,
+            {{MediaStreamTrack/getSupportedCaptureActions}} returns the set of
+            available [=capture actions=], if any, supported by the captured
+            application associated with this video track.
+          </p>
+          <pre class="idl">
+            partial interface MediaStreamTrack {
+              sequence&lt;DOMString&gt; getSupportedCaptureActions();
+              Promise&lt;undefined&gt; sendCaptureAction(CaptureAction action);
+            };
+          </pre>
+          <dl data-link-for="MediaStreamTrack" data-dfn-for="MediaStreamTrack">
+            <dt>
+              <dfn>getSupportedCaptureActions</dfn>
+            </dt>
+            <dd>
+              <p>When this method is invoked, the user agent MUST return [=this=]'
+              {{MediaDevices/[[AvailableCaptureActions]]}} if defined, or `[]` if not defined.</p>
+            </dd>
+            <dt>
+              <dfn>sendCaptureAction</dfn>
+            </dt>
+            <dd>
+              <p>When this method is invoked, the user agent MUST run the following steps:</p>
+              <ol>
+                <li>
+                  If the [=relevant global object=] of [=this=] does not have
+                  [=transient activation=], return a promise [=rejected=] with
+                  {{InvalidStateError}}.
+                </li>
+                <li>
+                  [=Consume user activation=].
+                </li>
+                <li>
+                  Let |action| be the method's first argument.
+                </li>
+                <li>
+                  If |action| is not in [=this=]' {{MediaDevices/[[AvailableCaptureActions]]}},
+                  return a promise [=rejected=] with {{NotFoundError}}.
+                </li>
+                <li>
+                  Let |p| be a new promise.
+                </li>
+                <li>
+                  Run the following steps in parallel:
+                  <ol>
+                    <li>
+                      <p>
+                        Queue a task on the task-list of the captured
+                        <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+                        <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>'s
+                        [=top-level browsing context=]'s [=active document=] to run the
+                        following steps:
+                      </p>
+                      <ol>
+                        <li>
+                          Let |target| be the the [=relevant settings object=]'s
+                          [=environment settings object/responsible document=]'s
+                          associated navigator's {{MediaDevices}} object.
+                        <li>
+                          If |action| is not in |target|'s
+                          {{MediaDevices/[[RegisteredCaptureActions]]}}, abort these steps.
+                        <li>
+                          [=Fire an event=] named `"captureaction"`, using a
+                          {{CaptureActionEvent}} with {{CaptureActionEventInit/action}}
+                          set to |action|, at |target|.
+                        </li>
+                      </ol>
+                      <li>
+                        Wait for the event to have been fired.
+                      </li>
+                      <li>
+                        Resolve |p|.
+                      </li>
+                    </li>
+                  </ol>
+                </li>
+                <li>
+                  Return |p|.
+                </li>
+              </ol>
+            </dd>
+          </dl>
+          <p>
+            When a video {{MediaStreamTrack}} is created as part of the
+            <a data-cite="SCREEN-CAPTURE#dom-mediadevices-getdisplaymedia">getDisplayMedia</a>
+            algorithm, whose source is a
+            <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+            <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>,
+            give it an
+            <dfn data-dfn-for="MediaDevices">[[\AvailableCaptureActions]]</dfn> internal
+            slot, initialized to the captured
+            <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+            <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>'s
+            [=top-level browsing context=]'s [=Browsing context/active window=]'s
+            associated navigator's {{MediaDevices}} object's
+            {{MediaDevices/[[RegisteredCaptureActions]]}}.
+          </p>
+          <p>
+            While capture of a
+            <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+            <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>
+            is occurring, whenever that surface's
+            [=top-level browsing context=] is navigated, then for each capturer of
+            that surface, queue a task on that capturer's task-list to set all
+            associated video {{MediaStreamTrack}}s'
+            {{MediaDevices/[[AvailableCaptureActions]]}} to `[]`.
+          </p>
         </section>
       </section>
     </section>
