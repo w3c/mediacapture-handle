@@ -416,8 +416,9 @@
         <p>
           Applications in top-level documents can declare the [=capture actions=]
           they support, if any. They would typically do so before even knowing if
-          they are being captured. These actions enable the user to control the
-          progression of the captured session without leaving the capturer document.
+          they are being captured. The intended use is for an application to expect to receive
+          these actions from capturer applications wishing to control the progression of
+          the captured session, in response to interaction with the user.
           Supported actions are declared by calling {{MediaDevices/setSupportedCaptureActions}}
           with an array of the names of actions the application is prepared to respond to.
         </p>
@@ -431,11 +432,11 @@
           </p>
           <p>
             <dfn>Capture actions</dfn> are values defined in {{CaptureAction}}.
-            They are meant to be interpreted as instructions from the user (through the user agent)
-            to control the advancement of the presentation of the captured session, however the
-            captured application wishes to define this. Actions are designed to originate from the
-            user through interactive controls provided by the capturer document, where they
-            [=consume user activation=].
+            They are meant to be interpreted as instructions from the capturing application to
+            control the advancement of the presentation of the captured session, however the
+            captured application wishes to define this. The intent is to support capturer
+            applications implementing interactive controls for these actions, whose sending
+            requires [=transient activation=] and [=consume user activation=].
           </p>
           <pre class="idl">
             partial interface MediaDevices {
@@ -611,7 +612,7 @@
                   Let |p| be a new promise.
                 </li>
                 <li>
-                  Run the following steps in parallel:
+                  Run the following steps [=in parallel=]:
                   <ol>
                     <li>
                       <p>
