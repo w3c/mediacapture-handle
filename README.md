@@ -7,6 +7,8 @@ Two quick demos are available:
 
 Capture Handle is a mechanism that allows a display-capturing web-application to ergonomically and confidently identify the web-application it is display-capturing (provided that the captured application has opted-in). Such identification allows these two applications to collaborate in interesting ways.
 
+Capture Actions is a mechanism that allows a display-capturing web-application to issue predefined standard actions like "next" and "previous" to the web-application it is display-capturing (provided that the captured application has opted-in).
+
 For example, if a VC application is capturing a presentation, then the VC application can expose user-controls for previous/next-slide directly in the VC application. This lets the user navigate presentations without having to jump between the VC and presentation tabs.
 
 # Problem Description
