@@ -299,6 +299,9 @@
               <code>display surface</code>, then the user agent MUST return <code>null</code>.
             </p>
             <p>
+              If the track is [=track/ended=], then the user agent MUST return <code>null</code>.
+            </p>
+            <p>
               If the captured application did not set a {{CaptureHandleConfig}}, or if the last time
               it set it to the empty {{CaptureHandleConfig}}, then the user agent MUST return
               <code>null</code>.
@@ -338,6 +341,10 @@
             </li>
             <li>The user agent switches the track to follow a new application.</li>
           </ol>
+          <p>
+            Events are not fired when the track [=track/ended|ends=], nor after it
+            [=track/ended|ends=].
+          </p>
           <pre class="idl">
             [Exposed=Window]
             interface CaptureHandleChangeEvent : Event {
