@@ -45,21 +45,25 @@
         </p>
       </section>
       <section id="use-case-1">
-        <h3>Use-case #1: Driving Presentation from Video Conferencing App</h3>
+        <h3>Use-case #1: Driving Presentations from Video Conferencing Apps</h3>
         <p>
           Consider a collaborating presentation software and video-conferencing software. Assume the
           user is in a VC session. The user starts sharing a presentation. Both applications are
           interested in letting the VC app discover that it is capturing a slides session, which
           application, and even which session, so that the VC application will be able to expose
           controls to the user for flipping through slides. When the user clicks those controls, the
-          VC app will be able to send messages to the presentation app (either through a service
-          worker or through a shared back-end infrastructure). These messages will instruct the
-          presentation app to flip through slides, enter/leave presentation-mode, etc.
+          VC app will be able to send messages to the presentation app, requesting that it do such
+          things as flip through slides, enter/leave presentation-mode, etc.
         </p>
         <p>
-          Note: Standardization efforts are underway for an API that will allow rudimentary
-          messaging between capturer and acapturee. The expected name is Capture Handle Actions.
+          The means for transmitting these messages are outside the scope of this document. Some
+          options are:
         </p>
+        <ul>
+          <li>Shared cloud infrastructure.</li>
+          <li>Messaging via a worker. (Note: Storage Partitioning might disrupt this option.)</li>
+          <li>A rudimentary messaging API might be added expressly for this purpose.</li>
+        </ul>
       </section>
       <section id="use-case-2">
         <h3>Use-case #2: Analytics</h3>

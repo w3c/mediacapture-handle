@@ -24,9 +24,15 @@ Both these traits are desirable for the general case, but there exist legitimate
 
 We wish to enable the legitimate use cases while keeping the general case as it was before.
 
-## Use-case #1: Cross-App Communications
+## Use-case #1: Driving Presentations from Video Conferencing Apps
 
-Consider two applications that wish to cooperate, for example a VC app and a presentation app. Assume the user is in a VC session. The user starts sharing a presentation. Both applications are interested in letting the VC app discover that it is capturing a slides session, which application, and even which session, so that the VC application will be able to expose controls to the user for flipping through slides. When the user clicks those controls, the VC app will be able to send messages to the presentation app (either through a service worker or through a shared back-end infrastructure). These messages will instruct the presentation app to flip through slides, enter/leave presentation-mode, etc.
+Consider a collaborating presentation software and video-conferencing software. Assume the user is in a VC session. The user starts sharing a presentation. Both applications are interested in letting the VC app discover that it is capturing a slides session, which application, and even which session, so that the VC application will be able to expose controls to the user for flipping through slides. When the user clicks those controls, the VC app will be able to send messages to the presentation app, requesting that it do such
+things as flip through slides, enter/leave presentation-mode, etc.
+
+The means for transmitting these messages are outside the scope of this document. Some options are:
+* Shared cloud infrastructure.</li>
+* Messaging via a worker. (Note: Storage Partitioning might disrupt this option.)
+* A rudimentary messaging API might be added expressly for this purpose.
 
 ## Use-case #2: Avoiding “Hall of Mirrors”
 
