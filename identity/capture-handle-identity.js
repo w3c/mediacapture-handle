@@ -2,7 +2,7 @@ var respecConfig = {
   group: "webrtc",
   specStatus: "unofficial",
   github: {
-    repoURL: "https://github.com/wicg/capture-handle/",
+    repoURL: "https://github.com/wicg/capture-handle/identity/",
     branch: "master",
   },
   editors: [
@@ -13,6 +13,6 @@ var respecConfig = {
     },
   ],
   xref: ["html", "infra", "permissions", "permissions-policy", "dom", "mediacapture-streams", "webidl", "screen-capture"],
-  shortName: "capture-handle",
-  subjectPrefix: "[capture-handle]",
+  shortName: "capture-handle-identity",
+  subjectPrefix: "[capture-handle-identity]",
 };
