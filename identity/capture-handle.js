@@ -11,6 +11,11 @@ var respecConfig = {
       email: "eladalon@google.com",
       company: "Google",
     },
+    {
+      name: "Jan-Ivar Bruaroey",
+      email: "jib@mozilla.com",
+      company: "Mozilla",
+    },
   ],
   xref: ["html", "infra", "permissions", "permissions-policy", "dom", "mediacapture-streams", "webidl", "screen-capture"],
   shortName: "capture-handle",
