@@ -1,7 +1,7 @@
 # TL;DR - Demos
 Two quick demos are available:
-1. Demo for remotely controlling a presentation [here](https://wicg.github.io/capture-handle/identity/demos/remote_control/capturer.html).
-2. Demo for detecting self-capture [here](https://wicg.github.io/capture-handle/identity/demos/self_capture_detection/index.html).
+1. Demo for remotely controlling a presentation [here](https://w3c.github.io/mediacapture-handle/identity/demos/remote_control/capturer.html).
+2. Demo for detecting self-capture [here](https://w3c.github.io/mediacapture-handle/identity/demos/self_capture_detection/index.html).
 
 # Summary
 
