@@ -2,7 +2,7 @@ var respecConfig = {
   group: "webrtc",
   specStatus: "unofficial",
   github: {
-    repoURL: "https://github.com/wicg/capture-handle/identity/",
+    repoURL: "https://github.com/w3c/capture-handle/",
     branch: "master",
   },
   editors: [
