@@ -193,7 +193,10 @@
             <ul>
               <li>
                 If {{CaptureHandleConfig/handle}} is set to an invalid value, the user agent MUST
-                reject by raising {{TypeError}}.
+                reject by raising {{TypeError}}. Invalid values include:
+                <ol>
+                  <li>Strings whose length exceeds 1024 16-bit characters.</li>
+                </ol>
               </li>
               <li>
                 If {{CaptureHandleConfig/permittedOrigins}} is set to an invalid value, the user
