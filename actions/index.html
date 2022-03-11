@@ -18,8 +18,8 @@
     <section id="conformance"></section>
     <section>
       <h2>Problem Description</h2>
-      <section id="generic-problem-desc">
-        <h3>Generic Problem Description</h3>
+      <section id="problem-desc">
+        <h3>Problem Description</h3>
         <p>
           Consider a web-application, running in one tab, which we’ll name "<var>main_app</var>."
           Assume <var>main_app</var> calls
@@ -35,12 +35,13 @@
           </li>
         </ol>
         <p>
-          Both these traits are desirable for the general case, but there exist legitimate use cases
-          where the browser would want to allow applications to opt-in to bridging that gap and
-          enable a connection.
+          Both of these traits are desirable in the general case, but there exists specific
+          use cases where the user of <var>main_app</var> would benefit if <var>main_app</var>
+          had available to it a limited set of standard instructions that <var>captured_app</var>
+          has opted into receiving.
         </p>
         <p>
-          We wish to enable the legitimate use cases while keeping the general case as it was
+          We wish to enable the specific use cases while keeping the general case as it was
           before.
         </p>
       </section>
