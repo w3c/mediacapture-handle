@@ -1,6 +1,6 @@
 var respecConfig = {
   group: "webrtc",
-  specStatus: "unofficial",
+  specStatus: "ED",
   github: {
     repoURL: "https://github.com/w3c/capture-handle/",
     branch: "master",
