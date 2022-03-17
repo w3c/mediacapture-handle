@@ -1,8 +1,8 @@
 var respecConfig = {
   group: "webrtc",
-  specStatus: "unofficial",
+  specStatus: "ED",
   github: {
-    repoURL: "https://github.com/wicg/capture-handle/actions/",
+    repoURL: "https://github.com/wicg/capture-handle/",
     branch: "master",
   },
   editors: [
