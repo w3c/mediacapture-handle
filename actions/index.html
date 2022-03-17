@@ -17,6 +17,48 @@
     </section>
     <section id="conformance"></section>
     <section>
+      <h2>Problem Description</h2>
+      <section id="problem-desc">
+        <h3>Problem Description</h3>
+        <p>
+          Consider a web-application, running in one tab, which we’ll name "<var>main_app</var>."
+          Assume <var>main_app</var> calls
+          <a data-cite="SCREEN-CAPTURE#dom-mediadevices-getdisplaymedia">getDisplayMedia</a>
+          and the user chooses to share another tab, where an application is running which we’ll
+          call "<var>captured_app</var>."
+        </p>
+        <p>Note that:</p>
+        <ol>
+          <li><var>main_app</var> does not know what it is capturing.</li>
+          <li>
+            <var>captured_app</var> does not know that it is being captured; let alone by whom.
+          </li>
+        </ol>
+        <p>
+          Both of these traits are desirable in the general case, but there exists specific
+          use cases where the user of <var>main_app</var> would benefit if <var>main_app</var>
+          had available to it a limited set of standard instructions that <var>captured_app</var>
+          has opted into receiving.
+        </p>
+        <p>
+          We wish to enable the specific use cases while keeping the general case as it was
+          before.
+        </p>
+      </section>
+      <section id="use-case-1">
+        <h3>Use-case #1: Driving Presentations from Video Conferencing Apps</h3>
+        <p>
+          Consider a collaborating presentation software and video-conferencing software. Assume the
+          user is in a VC session. The user starts sharing a presentation. Both applications are
+          interested in letting the VC app discover that it is capturing a slides session,
+          so that the VC application will be able to expose
+          controls to the user for flipping through slides. When the user clicks those controls, the
+          VC app will be able to send messages to the presentation app, requesting that it do such
+          things as flip through slides, etc.
+        </p>
+      </section>
+    </section>
+    <section>
       <h2>The Capture-Handle Actions Mechanism</h2>
       <p>
         The capture-handle actions mechanism consists of two parts - one on the captured side, one on
