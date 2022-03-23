@@ -12,8 +12,8 @@
       <p>
         This document proposes a mechanism by which an application <var>APP</var> can opt-in to
         exposing certain information with another application <var>CAPTR</var>, if
-        <var>CAPTR</var> is screen-capturing the tab in which <var>APP</var> is running.
-        It describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
+        <var>CAPTR</var> is screen-capturing the tab in which <var>APP</var> is running. It
+        describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
       </p>
     </section>
     <section id="conformance"></section>
@@ -296,8 +296,10 @@
           </dt>
           <dd>
             <p>
-              If the track in question is not a video track, or is not the result of a capture of a
-              <code>display surface</code>, then the user agent MUST return <code>null</code>.
+              If the track in question is not a video track, or does not represent a
+              <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+              <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>, then the user
+              agent MUST return <code>null</code>.
             </p>
             <p>
               If the track is [=track/ended=], then the user agent MUST return <code>null</code>.
