@@ -188,7 +188,7 @@
             <pre class="idl">
               [Exposed=Window]
               interface CaptureActionEvent : Event {
-                constructor(CaptureActionEventInit init);
+                constructor(optional CaptureActionEventInit init = {});
                 readonly attribute CaptureAction action;
               };
             </pre>
