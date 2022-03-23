@@ -349,7 +349,7 @@
           <pre class="idl">
             [Exposed=Window]
             interface CaptureHandleChangeEvent : Event {
-              constructor(CaptureHandleChangeEventInit init);
+              constructor(optional CaptureHandleChangeEventInit init = {});
               [SameObject] CaptureHandle captureHandle();
             };
           </pre>
