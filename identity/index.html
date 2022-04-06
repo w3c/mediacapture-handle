@@ -180,6 +180,14 @@
           which accepts a {{CaptureHandleConfig}} object. By calling this method, an application
           informs the user agent which information it permits capturing applications to observe.
         </p>
+        <div class="note">
+          <p>
+            There is no consensus yet on how {{MediaDevices/setCaptureHandleConfig}} should
+            behave if called more than once, due to concerns over it being misused as a
+            cross-origin messaging channel itself. This is under discussion in
+            <a href="https://github.com/w3c/mediacapture-handle/issues/11">issue #11</a>.
+          </p>
+        </div>
         <pre class="idl">
           partial interface MediaDevices {
             undefined setCaptureHandleConfig(optional CaptureHandleConfig config = {});
@@ -285,6 +293,17 @@
           {{MediaStreamTrack/getCaptureHandle}} returns the latest [=observable=] {{CaptureHandle}}.
           Otherwise it returns <code>null</code>.
         </p>
+        <div class="note">
+          <p>
+            There is no consensus yet on whether {{MediaStreamTrack/getCaptureHandle}}
+            belongs on {{MediaStreamTrack}} or on a dedicated controller object that is
+            neither <a data-cite="GETUSERMEDIA#track-clone">clonable</a> nor <a
+            href="https://w3c.github.io/mediacapture-extensions/#transferable-mediastreamtrack"
+            >transferable</a>, to separate messaging affecting all tracks from consumption
+            of a single track. This is under discussion in
+            <a href="https://github.com/w3c/mediacapture-handle/issues/12">issue #12</a>.
+          </p>
+        </div>
         <pre class="idl">
           partial interface MediaStreamTrack {
             CaptureHandle? getCaptureHandle();
