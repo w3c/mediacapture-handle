@@ -12,8 +12,8 @@
       <p>
         This document proposes a mechanism by which an application <var>APP</var> can opt-in to
         exposing certain information with another application <var>CAPTR</var>, if
-        <var>CAPTR</var> is screen-capturing the tab in which <var>APP</var> is running.
-        It describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
+        <var>CAPTR</var> is screen-capturing the tab in which <var>APP</var> is running. It
+        describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
       </p>
     </section>
     <section id="conformance"></section>
@@ -363,9 +363,8 @@
             <dd>
               <p>
                 The track's {{CaptureHandle}} at the time the event was fired, as [=observable=] by
-                the capturing application. If not [=observable=] by the capturing application, all
-                of {{CaptureHandle}}'s fields will be set to their default value - the empty
-                {{DOMString}}.
+                the capturing application. If not [=observable=] by the capturing application,
+                <code>null</code> is returned.
               </p>
             </dd>
           </dl>
