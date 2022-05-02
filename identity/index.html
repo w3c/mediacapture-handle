@@ -12,8 +12,8 @@
       <p>
         This document proposes a mechanism by which an application <var>APP</var> can opt-in to
         exposing certain information with another application <var>CAPTR</var>, if
-        <var>CAPTR</var> is screen-capturing the tab in which <var>APP</var> is running.
-        It describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
+        <var>CAPTR</var> is screen-capturing the tab in which <var>APP</var> is running. It
+        describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
       </p>
     </section>
     <section id="conformance"></section>
@@ -158,7 +158,7 @@
             <dfn>permittedOrigins</dfn>
           </dt>
           <dd>
-            <p>Legal values of this field include:</p>
+            <p>Valid values of this field include:</p>
             <ul>
               <li>The empty list.</li>
               <li>A list with the single item <code>"*"</code></li>
@@ -180,6 +180,14 @@
           which accepts a {{CaptureHandleConfig}} object. By calling this method, an application
           informs the user agent which information it permits capturing applications to observe.
         </p>
+        <div class="note">
+          <p>
+            There is no consensus yet on how {{MediaDevices/setCaptureHandleConfig}} should
+            behave if called more than once, due to concerns over it being misused as a
+            cross-origin messaging channel itself. This is under discussion in
+            <a href="https://github.com/w3c/mediacapture-handle/issues/11">issue #11</a>.
+          </p>
+        </div>
         <pre class="idl">
           partial interface MediaDevices {
             undefined setCaptureHandleConfig(optional CaptureHandleConfig config = {});
@@ -236,7 +244,7 @@
     <section id="capturing-side">
       <h2>Capturing Side</h2>
       <p>
-        Capturing applications who are permitted to [=observable|observe=] a track's
+        Capturing applications which are permitted to [=observable|observe=] a track's
         {{CaptureHandle}} have two ways of reading it.
       </p>
       <ol>
@@ -288,6 +296,17 @@
           {{MediaStreamTrack/getCaptureHandle}} returns the latest [=observable=] {{CaptureHandle}}.
           Otherwise it returns <code>null</code>.
         </p>
+        <div class="note">
+          <p>
+            There is no consensus yet on whether {{MediaStreamTrack/getCaptureHandle}}
+            belongs on {{MediaStreamTrack}} or on a dedicated controller object that is
+            neither <a data-cite="GETUSERMEDIA#track-clone">clonable</a> nor <a
+            href="https://w3c.github.io/mediacapture-extensions/#transferable-mediastreamtrack"
+            >transferable</a>, to separate messaging affecting all tracks from consumption
+            of a single track. This is under discussion in
+            <a href="https://github.com/w3c/mediacapture-handle/issues/12">issue #12</a>.
+          </p>
+        </div>
         <pre class="idl">
           partial interface MediaStreamTrack {
             CaptureHandle? getCaptureHandle();
@@ -299,8 +318,10 @@
           </dt>
           <dd>
             <p>
-              If the track in question is not a video track, or is not the result of a capture of a
-              <code>display surface</code>, then the user agent MUST return <code>null</code>.
+              If the track in question is not a video track, or does not represent a
+              <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
+              <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>, then the user
+              agent MUST return <code>null</code>.
             </p>
             <p>
               If the track is [=track/ended=], then the user agent MUST return <code>null</code>.
@@ -352,7 +373,7 @@
           <pre class="idl">
             [Exposed=Window]
             interface CaptureHandleChangeEvent : Event {
-              constructor(CaptureHandleChangeEventInit init);
+              constructor(optional CaptureHandleChangeEventInit init = {});
               [SameObject] CaptureHandle captureHandle();
             };
           </pre>
