@@ -229,10 +229,8 @@
             <ol>
               <li>
                 For every capturing application for which the new [=observable=] {{CaptureHandle}}
-                is different than prior to the call to {{MediaDevices/setCaptureHandleConfig}}, an
-                event of type {{CaptureHandleChangeEvent}} must be fired with
-                {{CaptureHandleChangeEvent/captureHandle}} set to the new [=observable=]
-                {{CaptureHandle}}.
+                is different than prior to the call to {{MediaDevices/setCaptureHandleConfig}},
+                the user agent MUST fire an event named [=capturehandlechange=].
               </li>
               <li>
                 The user agent MUST report the new [=observable=] {{CaptureHandle}} whenever
@@ -349,11 +347,11 @@
       </section>
       <section id="events">
         <h3>On-Change Event</h3>
-        <section id="capture-handle-change-event">
-          <h4><dfn>CaptureHandleChangeEvent</dfn></h4>
+        <section id="capturehandlechange">
+          <h4><dfn>capturehandlechange</dfn></h4>
           <p>
             Whenever the [=observable=] {{CaptureHandle}} for a given capturing application changes,
-            the user agent fires an event of type CaptureHandleChangeEvent. This can happen in the
+            the user agent fires an event named [=capturehandlechange=]. This can happen in the
             following cases:
           </p>
           <ol>
@@ -372,45 +370,6 @@
             Events are not fired when the track [=track/ended|ends=], nor after it
             [=track/ended|ends=].
           </p>
-          <pre class="idl">
-            [Exposed=Window]
-            interface CaptureHandleChangeEvent : Event {
-              constructor(optional CaptureHandleChangeEventInit init = {});
-              [SameObject] CaptureHandle captureHandle();
-            };
-          </pre>
-          <dl data-link-for="CaptureHandleChangeEvent" data-dfn-for="CaptureHandleChangeEvent">
-            <dt>
-              <dfn>captureHandle</dfn>
-            </dt>
-            <dd>
-              <p>
-                The track's {{CaptureHandle}} at the time the event was fired, as [=observable=] by
-                the capturing application. If not [=observable=] by the capturing application, all
-                of {{CaptureHandle}}'s fields will be set to their default value - the empty
-                {{DOMString}}.
-              </p>
-            </dd>
-          </dl>
-        </section>
-        <section>
-          <h4><dfn>CaptureHandleChangeEventInit</dfn></h4>
-          <pre class="idl">
-            dictionary CaptureHandleChangeEventInit : EventInit {
-              CaptureHandle captureHandle;
-            };
-          </pre>
-          <dl
-            data-link-for="CaptureHandleChangeEventInit"
-            data-dfn-for="CaptureHandleChangeEventInit"
-          >
-            <dt>
-              <dfn>captureHandle</dfn>
-            </dt>
-            <dd>
-              <p>The track's {{CaptureHandle}} at the time the event was fired.</p>
-            </dd>
-          </dl>
         </section>
         <section id="oncapturehandlechange">
           <h4><dfn>oncapturehandlechange</dfn></h4>
@@ -428,7 +387,7 @@
               <dfn>oncapturehandlechange</dfn>
             </dt>
             <dd>
-              <p>{{EventHandler}} for events of type {{CaptureHandleChangeEvent}}.</p>
+              <p>{{EventHandler}} for events named [=capturehandlechange=].</p>
             </dd>
           </dl>
         </section>
