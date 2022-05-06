@@ -2,8 +2,8 @@ var respecConfig = {
   group: "webrtc",
   specStatus: "ED",
   github: {
-    repoURL: "https://github.com/w3c/capture-handle/",
-    branch: "master",
+    repoURL: "https://github.com/w3c/mediacapture-handle/",
+    branch: "main",
   },
   editors: [
     {
