@@ -225,7 +225,7 @@
               <li>
                 For every capturing application for which the new [=observable=] {{CaptureHandle}}
                 is different than prior to the call to {{MediaDevices/setCaptureHandleConfig}}, an
-                event named "capturehandlechange" must be fired.
+                event named [=capturehandlechange=] must be fired.
               </li>
               <li>
                 The user agent MUST report the new [=observable=] {{CaptureHandle}} whenever
@@ -342,11 +342,11 @@
       </section>
       <section id="events">
         <h3>On-Change Event</h3>
-        <section id="capture-handle-change-event">
-          <h4><dfn>CaptureHandleChangeEvent</dfn></h4>
+        <section id="capturehandlechange">
+          <h4><dfn>capturehandlechange</dfn></h4>
           <p>
             Whenever the [=observable=] {{CaptureHandle}} for a given capturing application changes,
-            the user agent fires an event of type CaptureHandleChangeEvent. This can happen in the
+            the user agent fires an event named [=capturehandlechange=]. This can happen in the
             following cases:
           </p>
           <ol>
@@ -365,12 +365,6 @@
             Events are not fired when the track [=track/ended|ends=], nor after it
             [=track/ended|ends=].
           </p>
-          <pre class="idl">
-            [Exposed=Window]
-            interface CaptureHandleChangeEvent : Event {
-              constructor();
-            };
-          </pre>
         </section>
         <section id="oncapturehandlechange">
           <h4><dfn>oncapturehandlechange</dfn></h4>
@@ -388,7 +382,7 @@
               <dfn>oncapturehandlechange</dfn>
             </dt>
             <dd>
-              <p>{{EventHandler}} for events of type {{CaptureHandleChangeEvent}}.</p>
+              <p>{{EventHandler}} for events named [=capturehandlechange=].</p>
             </dd>
           </dl>
         </section>
