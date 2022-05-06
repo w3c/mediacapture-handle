@@ -188,7 +188,7 @@
         video.srcObject = stream;
         let [track] = stream.getVideoTracks();
         track.oncapturehandlechange = (event) => {
-          captureHandle = newVersion ? event.captureHandle() : event.captureHandle;
+          captureHandle = newVersion ? event.target.getCaptureHandle() : event.captureHandle;
           update();
         };
         captureHandle = getCaptureHandle(stream);
