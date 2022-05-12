@@ -1,4 +1,3 @@
-
 # Capture Handle 
 
 [![WPT Chrome](https://wpt-badge.glitch.me/?product=chrome&prefix=/mediacapture-handle/)](https://wpt.fyi/results/mediacapture-handle)
