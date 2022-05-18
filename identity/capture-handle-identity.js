@@ -5,6 +5,7 @@ var respecConfig = {
     repoURL: "https://github.com/w3c/mediacapture-handle/",
     branch: "main",
   },
+  edDraftURI: "https://w3c.github.io/mediacapture-handle/identity/",
   editors: [
     {
       name: "Elad Alon",
