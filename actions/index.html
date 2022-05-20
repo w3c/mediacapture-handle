@@ -16,6 +16,11 @@
         It describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
       </p>
     </section>
+    <section id="sotd">
+      <p>
+        This document is not complete.
+      </p>
+    </section>
     <section id="conformance"></section>
     <section>
       <h2>Problem Description</h2>
@@ -126,9 +131,8 @@
               <p>When this method is invoked, the user agent MUST run the following steps:</p>
               <ol>
                 <li>
-                  If the [=relevant settings object=]'s
-                  [=environment settings object/responsible document=] is either not
-                  [=Document/fully active=] or its [=browsing context=] is not a
+                  If the [=relevant global object=]'s [=associated `Document`=] is
+                  either not [=Document/fully active=] or its [=browsing context=] is not a
                   [=top-level browsing context=], then throw {{InvalidAccessError}}.
                 </li>
                 <li>
@@ -291,8 +295,8 @@
                       </p>
                       <ol>
                         <li>
-                          Let |target| be the the [=relevant settings object=]'s
-                          [=environment settings object/responsible document=]'s
+                          Let |target| be the the [=relevant global object=]'s
+                          [=associated `Document`=]'s
                           associated navigator's {{MediaDevices}} object.
                         <li>
                           If |action| is not in |target|'s

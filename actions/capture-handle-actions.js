@@ -2,9 +2,10 @@ var respecConfig = {
   group: "webrtc",
   specStatus: "ED",
   github: {
-    repoURL: "https://github.com/wicg/capture-handle/",
-    branch: "master",
+    repoURL: "https://github.com/w3c/mediacapture-handle/",
+    branch: "main",
   },
+  edDraftURI: "https://w3c.github.io/mediacapture-handle/actions/",
   editors: [
     {
       name: "Jan-Ivar Bruaroey",
