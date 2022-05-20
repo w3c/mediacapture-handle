@@ -208,7 +208,9 @@
             <ul>
               <li>
                 If {{CaptureHandleConfig/handle}} is set to an invalid value, the user agent MUST
-                reject by raising {{TypeError}}.
+                [=throw=] {{TypeError}} if the length of {{CaptureHandleConfig/handle}}
+                exceeds 1024.</li>
+                </ul>
               </li>
               <li>
                 If {{CaptureHandleConfig/permittedOrigins}} is set to an invalid value, the user
