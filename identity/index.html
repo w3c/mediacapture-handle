@@ -231,7 +231,7 @@
               <li>
                 For every capturing application for which the new [=observable=] {{CaptureHandle}}
                 is different than prior to the call to {{MediaDevices/setCaptureHandleConfig}},
-                the user agent MUST fire an event named [=capturehandlechange=].
+                the user agent MUST [=fire an event=] named {{MediaStreamTrack/capturehandlechange}}.
               </li>
               <li>
                 The user agent MUST report the new [=observable=] {{CaptureHandle}} whenever
@@ -349,10 +349,10 @@
       <section id="events">
         <h3>On-Change Event</h3>
         <section id="capturehandlechange">
-          <h4><dfn>capturehandlechange</dfn></h4>
+          <h4><dfn data-dfn-type="event" data-dfn-for="MediaStreamTrack">capturehandlechange</dfn></h4>
           <p>
             Whenever the [=observable=] {{CaptureHandle}} for a given capturing application changes,
-            the user agent fires an event named [=capturehandlechange=]. This can happen in the
+            the user agent fires an event named {{MediaStreamTrack/capturehandlechange}}. This can happen in the
             following cases:
           </p>
           <ol>
@@ -388,7 +388,7 @@
               <dfn>oncapturehandlechange</dfn>
             </dt>
             <dd>
-              <p>{{EventHandler}} for events named [=capturehandlechange=].</p>
+              <p>{{EventHandler}} for events named {{MediaStreamTrack/capturehandlechange}}.</p>
             </dd>
           </dl>
         </section>
