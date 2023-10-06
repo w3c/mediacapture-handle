@@ -179,7 +179,7 @@
 
         let stream;
         try {
-          stream = await navigator.mediaDevices.getDisplayMedia();
+          stream = await navigator.mediaDevices.getDisplayMedia({selfBrowserSurface: "include"});
         } catch (error) {
           update();
           return;
