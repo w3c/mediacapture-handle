@@ -13,12 +13,6 @@ var respecConfig = {
       company: "Google",
       w3cid: 118124,
     },
-    {
-      name: "Jan-Ivar Bruaroey",
-      email: "jib@mozilla.com",
-      company: "Mozilla",
-      w3cid: 79152,
-    },
   ],
   xref: ["html", "infra", "permissions", "permissions-policy", "dom", "mediacapture-streams", "webidl", "screen-capture"],
   shortName: "capture-handle-identity",
