@@ -17,9 +17,7 @@
       </p>
     </section>
     <section id="sotd">
-      <p>
-        This document is not complete.
-      </p>
+      <p>This document is not complete.</p>
     </section>
     <section id="conformance"></section>
     <section>
@@ -32,7 +30,6 @@
           <a data-cite="SCREEN-CAPTURE#dom-mediadevices-getdisplaymedia">getDisplayMedia</a>
           and the user chooses to share another tab, where an application is running which we’ll
           call "<var>captured_app</var>."
-	  
         </p>
         <p>Note that:</p>
         <ol>
@@ -188,9 +185,9 @@
         </p>
         <div class="note">
           <p>
-            There is no consensus yet on how {{MediaDevices/setCaptureHandleConfig}} should
-            behave if called more than once, due to concerns over it being misused as a
-            cross-origin messaging channel itself. This is under discussion in
+            There is no consensus yet on how {{MediaDevices/setCaptureHandleConfig}} should behave
+            if called more than once, due to concerns over it being misused as a cross-origin
+            messaging channel itself. This is under discussion in
             <a href="https://github.com/w3c/mediacapture-handle/issues/11">issue #11</a>.
           </p>
         </div>
@@ -230,8 +227,8 @@
             <ol>
               <li>
                 For every capturing application for which the new [=observable=] {{CaptureHandle}}
-                is different than prior to the call to {{MediaDevices/setCaptureHandleConfig}},
-                the user agent MUST [=fire an event=] named {{MediaStreamTrack/capturehandlechange}}.
+                is different than prior to the call to {{MediaDevices/setCaptureHandleConfig}}, the
+                user agent MUST [=fire an event=] named {{MediaStreamTrack/capturehandlechange}}.
               </li>
               <li>
                 The user agent MUST report the new [=observable=] {{CaptureHandle}} whenever
@@ -299,12 +296,13 @@
         </p>
         <div class="note">
           <p>
-            There is no consensus yet on whether {{MediaStreamTrack/getCaptureHandle}}
-            belongs on {{MediaStreamTrack}} or on a dedicated controller object that is
-            neither <a data-cite="GETUSERMEDIA#track-clone">clonable</a> nor <a
-            href="https://w3c.github.io/mediacapture-extensions/#transferable-mediastreamtrack"
-            >transferable</a>, to separate messaging affecting all tracks from consumption
-            of a single track. This is under discussion in
+            There is no consensus yet on whether {{MediaStreamTrack/getCaptureHandle}} belongs on
+            {{MediaStreamTrack}} or on a dedicated controller object that is neither
+            <a data-cite="GETUSERMEDIA#track-clone">clonable</a> nor
+            <a href="https://w3c.github.io/mediacapture-extensions/#transferable-mediastreamtrack"
+              >transferable</a
+            >, to separate messaging affecting all tracks from consumption of a single track. This
+            is under discussion in
             <a href="https://github.com/w3c/mediacapture-handle/issues/12">issue #12</a>.
           </p>
         </div>
@@ -325,7 +323,8 @@
               agent MUST return <code>null</code>.
             </p>
             <p>
-              If the track is [=MediaStreamTrack/ended=], then the user agent MUST return <code>null</code>.
+              If the track is [=MediaStreamTrack/ended=], then the user agent MUST return
+              <code>null</code>.
             </p>
             <p>
               If the captured application did not set a {{CaptureHandleConfig}}, or if the last time
@@ -349,11 +348,13 @@
       <section id="events">
         <h3>On-Change Event</h3>
         <section id="capturehandlechange">
-          <h4><dfn data-dfn-type="event" data-dfn-for="MediaStreamTrack">capturehandlechange</dfn></h4>
+          <h4>
+            <dfn data-dfn-type="event" data-dfn-for="MediaStreamTrack">capturehandlechange</dfn>
+          </h4>
           <p>
             Whenever the [=observable=] {{CaptureHandle}} for a given capturing application changes,
-            the user agent fires an event named {{MediaStreamTrack/capturehandlechange}}. This can happen in the
-            following cases:
+            the user agent fires an event named {{MediaStreamTrack/capturehandlechange}}. This can
+            happen in the following cases:
           </p>
           <ol>
             <li>
