@@ -13,7 +13,8 @@
         This document proposes a mechanism by which an application <var>APP</var> can opt-in to
         exposing certain information with another application <var>CAPTR</var>, if
         <var>CAPTR</var> is screen-capturing the tab in which <var>APP</var> is running. It
-        describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> only.
+        describes a mechanism for <a data-cite="SCREEN-CAPTURE#dfn-browser">tab capture</a> or
+        <a data-cite="SCREEN-CAPTURE#dfn-window">window capture</a>.
       </p>
     </section>
     <section id="sotd">
@@ -25,12 +26,18 @@
       <section id="generic-problem-desc">
         <h3>Generic Problem Description</h3>
         <p>
-          Consider a web-application, running in one tab, which we’ll name "<var>main_app</var>."
+          Consider a web-application, running in one tab, which we'll name "<var>main_app</var>."
           Assume <var>main_app</var> calls
           <a data-cite="SCREEN-CAPTURE#dom-mediadevices-getdisplaymedia">getDisplayMedia</a>
-          and the user chooses to share another tab, where an application is running which we’ll
-          call "<var>captured_app</var>."
+          and the user chooses to either:
         </p>
+        <ul>
+          <li>
+            Share another tab, where an application is running which we'll call
+            "<var>captured_app</var>."
+          </li>
+          <li>Share a user agent window hosting such a tab.</li>
+        </ul>
         <p>Note that:</p>
         <ol>
           <li><var>main_app</var> does not know what it is capturing.</li>
@@ -317,9 +324,14 @@
           </dt>
           <dd>
             <p>
-              If the track in question is not a video track, or does not represent a
-              <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a>
-              <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a>, then the user
+              If the track in question is not a video track then the user agent MUST return
+              <code>null</code>.
+            </p>
+            <p>
+              If the track does not represent either a
+              <a data-cite="SCREEN-CAPTURE#dfn-browser">browser</a> or a
+              <a data-cite="SCREEN-CAPTURE#dfn-window">window</a>
+              <a data-cite="SCREEN-CAPTURE#dfn-display-surface">display surface</a> then the user
               agent MUST return <code>null</code>.
             </p>
             <p>
